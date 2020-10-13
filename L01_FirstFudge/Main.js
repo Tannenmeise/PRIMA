@@ -2,6 +2,7 @@
 var L01_FirstFudge;
 (function (L01_FirstFudge) {
     var ƒ = FudgeCore;
+    console.log("Hallo");
     window.addEventListener("load", hndLoad);
     function hndLoad(_event) {
         const canvas = document.querySelector("canvas");

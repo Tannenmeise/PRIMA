@@ -1,6 +1,8 @@
 namespace L01_FirstFudge {
     import ƒ = FudgeCore;
 
+    console.log("Hallo");
+
     window.addEventListener("load", hndLoad);
     export let viewport: ƒ.Viewport;
 
