@@ -1,4 +1,4 @@
-namespace L03_BouncingBall {
+namespace L03a_BouncingBall {
 
     import f = FudgeCore;
     export let viewport: f.Viewport;

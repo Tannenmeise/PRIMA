@@ -1,6 +1,6 @@
 "use strict";
-var L03_BouncingBall;
-(function (L03_BouncingBall) {
+var L03a_BouncingBall;
+(function (L03a_BouncingBall) {
     var f = FudgeCore;
     let root;
     let ballDirection = new f.Vector3(0.01, 0.01, 0);
@@ -26,8 +26,8 @@ var L03_BouncingBall;
         let cmpCamera = new f.ComponentCamera();
         cmpCamera.pivot.translateZ(4);
         cmpCamera.pivot.rotateY(180);
-        L03_BouncingBall.viewport = new f.Viewport();
-        L03_BouncingBall.viewport.initialize("Viewport", root, cmpCamera, canvas);
+        L03a_BouncingBall.viewport = new f.Viewport();
+        L03a_BouncingBall.viewport.initialize("Viewport", root, cmpCamera, canvas);
         f.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, hndlLoop);
         f.Loop.start(f.LOOP_MODE.TIME_GAME, 30);
     }
@@ -44,7 +44,7 @@ var L03_BouncingBall;
             console.log("Top/Bottom hit!");
         }
         root.mtxLocal.translate(ballDirection);
-        L03_BouncingBall.viewport.draw();
+        L03a_BouncingBall.viewport.draw();
     }
-})(L03_BouncingBall || (L03_BouncingBall = {}));
+})(L03a_BouncingBall || (L03a_BouncingBall = {}));
 //# sourceMappingURL=Main.js.map
