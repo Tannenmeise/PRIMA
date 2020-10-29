@@ -1,6 +1,6 @@
 "use strict";
-var L04_FirstCollision;
-(function (L04_FirstCollision) {
+var L04a_FirstCollision;
+(function (L04a_FirstCollision) {
     var f = FudgeCore;
     let root;
     let ball;
@@ -14,8 +14,8 @@ var L04_FirstCollision;
     let bottomBorder;
     let bricks;
     let brick1;
-    let brick2;
-    let brick3;
+    //let brick2: f.Node;
+    //let brick3: f.Node;
     let paddle;
     //let ballDirection: f.Vector3 = new f.Vector3(0, 0, 0);
     window.addEventListener("load", hndlLoad);
@@ -73,7 +73,7 @@ var L04_FirstCollision;
         cmpTopBorder.pivot.scaleX(39);
         border.appendChild(topBorder);
         // BOTTOM BORDER:
-        bottomBorder = new f.Node("Top_Border");
+        bottomBorder = new f.Node("Bottom_Border");
         bottomBorder.addComponent(new f.ComponentTransform());
         let meshBottomBorder = new f.MeshQuad();
         let cmpBottomBorder = new f.ComponentMesh(meshBottomBorder);
@@ -120,8 +120,8 @@ var L04_FirstCollision;
         let cmpCamera = new f.ComponentCamera();
         cmpCamera.pivot.translateZ(40);
         cmpCamera.pivot.rotateY(180);
-        L04_FirstCollision.viewport = new f.Viewport();
-        L04_FirstCollision.viewport.initialize("Viewport", root, cmpCamera, canvas);
+        L04a_FirstCollision.viewport = new f.Viewport();
+        L04a_FirstCollision.viewport.initialize("Viewport", root, cmpCamera, canvas);
         f.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, hndlLoop);
         f.Loop.start(f.LOOP_MODE.TIME_GAME, 30);
     }
@@ -131,16 +131,20 @@ var L04_FirstCollision;
         let tmpVelocity = velocity.copy;
         tmpVelocity.scale(frameTime);
         ball.mtxLocal.translate(tmpVelocity);
-        // HANDLE COLLISION:
-        // My try: ---------------
-        //console.log("RightBorder.x = " + rightBorder.cmpTransform.local.translation.x);
-        /*
-        if (ball.cmpTransform.local.translation.x < leftBorder.cmpTransform.local.translation.x || ball.cmpTransform.local.translation.x > rightBorder.cmpTransform.local.translation.x) {
-            
+        console.log(leftBorder.cmpTransform.local.translation.copy);
+        // Hitting borders:
+        // Ball hits sides
+        if (ball.mtxLocal.translation.x < -18.5 || ball.mtxLocal.translation.x > 18.5) {
             velocity.x *= -1;
+            console.log("Wall hit!");
         }
-        */
-        // ----------------
+        // Ball hits top/bottom
+        if (ball.mtxLocal.translation.y < -11.5 || ball.mtxLocal.translation.y > 11.5) {
+            velocity.y *= -1;
+            console.log("Top/Bottom hit!");
+        }
+        // Wie bekommt man die Position von Objekten? -> Problem: x,y,z immer 0! Z.B. bei rightBorder.cmpTransform.local.translation.x
+        // HANDLE COLLISION:
         // PRIMA Repository:
         /*
         let hit: boolean = false;
@@ -155,37 +159,7 @@ var L04_FirstCollision;
             }
         }
         */
-        L04_FirstCollision.viewport.draw();
+        L04a_FirstCollision.viewport.draw();
     }
-    function checkCollision(_position, _node) {
-        /*
-        let sclRect: f.Vector3 = _node.getComponent(f.ComponentMesh).pivot.scaling.copy;
-        let posRect: f.Vector3 = _node.cmpTransform.local.translation.copy;
-        let rect: f.Rectangle = new f.Rectangle(posRect.x, posRect.y, sclRect.x, sclRect.y, f.ORIGIN2D.CENTER);
-        return rect.isInside(_position.toVector2());
-        */
-        return true;
-    }
-    function hndlCollision(_node) {
-        /*
-        switch (_node.name) {
-            case "TopBorder":
-                velocity.y *= -1;
-                break;
-            case "BottomBorder":
-                velocity.y *= -1;
-                break;
-            case "RightBorder":
-                velocity.x *= -1;
-                break;
-            case "LeftBorder":
-                velocity.x *= -1;
-                break;
-            default:
-                break;
-        }
-
-    */
-    }
-})(L04_FirstCollision || (L04_FirstCollision = {}));
+})(L04a_FirstCollision || (L04a_FirstCollision = {}));
 //# sourceMappingURL=Main.js.map

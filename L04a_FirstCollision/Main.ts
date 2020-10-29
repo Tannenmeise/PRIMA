@@ -1,4 +1,4 @@
-namespace L04_FirstCollision {
+namespace L04a_FirstCollision {
 
     import f = FudgeCore;
     export let viewport: f.Viewport;
@@ -17,8 +17,8 @@ namespace L04_FirstCollision {
 
     let bricks: f.Node;
     let brick1: f.Node;
-    let brick2: f.Node;
-    let brick3: f.Node;
+    //let brick2: f.Node;
+    //let brick3: f.Node;
 
     let paddle: f.Node;
 
@@ -102,7 +102,7 @@ namespace L04_FirstCollision {
         border.appendChild(topBorder);
 
         // BOTTOM BORDER:
-        bottomBorder = new f.Node("Top_Border");
+        bottomBorder = new f.Node("Bottom_Border");
 
         bottomBorder.addComponent(new f.ComponentTransform());
         let meshBottomBorder: f.MeshQuad = new f.MeshQuad();
@@ -184,17 +184,24 @@ namespace L04_FirstCollision {
         tmpVelocity.scale(frameTime);
         ball.mtxLocal.translate(tmpVelocity);
 
-        // HANDLE COLLISION:
+        console.log(leftBorder.cmpTransform.local.translation.copy);
 
-        // My try: ---------------
-        //console.log("RightBorder.x = " + rightBorder.cmpTransform.local.translation.x);
-        /*
-        if (ball.cmpTransform.local.translation.x < leftBorder.cmpTransform.local.translation.x || ball.cmpTransform.local.translation.x > rightBorder.cmpTransform.local.translation.x) {
-            
+
+        // Hitting borders:
+        // Ball hits sides
+        if (ball.mtxLocal.translation.x < -18.5 || ball.mtxLocal.translation.x > 18.5) {
             velocity.x *= -1;
+            console.log("Wall hit!");
         }
-        */
-        // ----------------
+        // Ball hits top/bottom
+        if (ball.mtxLocal.translation.y < -11.5 || ball.mtxLocal.translation.y > 11.5) {
+            velocity.y *= -1;
+            console.log("Top/Bottom hit!");
+        }
+
+        // Wie bekommt man die Position von Objekten? -> Problem: x,y,z immer 0! Z.B. bei rightBorder.cmpTransform.local.translation.x
+
+        // HANDLE COLLISION:
         
         // PRIMA Repository:
         /*
@@ -212,41 +219,4 @@ namespace L04_FirstCollision {
         */
         viewport.draw();
     }
-
-    function checkCollision(_position: f.Vector3, _node: f.Node): boolean {
-
-
-        /*
-        let sclRect: f.Vector3 = _node.getComponent(f.ComponentMesh).pivot.scaling.copy;
-        let posRect: f.Vector3 = _node.cmpTransform.local.translation.copy;
-        let rect: f.Rectangle = new f.Rectangle(posRect.x, posRect.y, sclRect.x, sclRect.y, f.ORIGIN2D.CENTER);
-        return rect.isInside(_position.toVector2());
-        */
-       return true;
-    }
-
-    function hndlCollision(_node: f.Node): void {
-
-
-        /*
-        switch (_node.name) {
-            case "TopBorder":
-                velocity.y *= -1;
-                break;
-            case "BottomBorder":
-                velocity.y *= -1;
-                break;
-            case "RightBorder":
-                velocity.x *= -1;
-                break;
-            case "LeftBorder":
-                velocity.x *= -1;
-                break;
-            default:
-                break;
-        }
-
-    */
-    }
-
 }
