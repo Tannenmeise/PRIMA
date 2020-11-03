@@ -55,19 +55,20 @@ namespace L06_BreakOut_Paddle {
     viewport.draw();
 
     hndCollision();
-    
+
     paddle.move();
 
-    //new f.Axis(),
-    //new f.Control();
+
+    //let axis: f.Axis = new f.Axis("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
+    // let control: f.Control = new f.Control("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
 
   }
 
   function hndCollision(): void {
-    for (let wall of walls.getChildren()) 
+    for (let wall of walls.getChildren())
       ball.checkCollision(<GameObject>wall);
 
-    for (let brick of bricks.getChildren() as Bricks[]) 
+    for (let brick of bricks.getChildren() as Bricks[])
       if (ball.checkCollision(brick))
         brick.hit();
 
@@ -78,15 +79,15 @@ namespace L06_BreakOut_Paddle {
     let x: number = -15;
     let y: number = 10;
     for (let i: number = 0; i < _amount; i++) {
-        if (x > 15) {
-            x = -15;
-            y -= 2;
-        }
-        
-        bricks.addChild(new Bricks(`Brick-${i}`, new f.Vector2(x, y), new f.Vector2(3, 1)));
-        x += 4;
+      if (x > 15) {
+        x = -15;
+        y -= 2;
+      }
+
+      bricks.addChild(new Bricks(`Brick-${i}`, new f.Vector2(x, y), new f.Vector2(3, 1)));
+      x += 4;
     }
-}
+  }
 
 
 }

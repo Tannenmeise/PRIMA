@@ -20,6 +20,7 @@ namespace L06_BreakOut_Paddle {
             this.mtxLocal.translate(new f.Vector3(1, 0));
             this.rect.position.x += 1;
         }
+        
       }
 
     }

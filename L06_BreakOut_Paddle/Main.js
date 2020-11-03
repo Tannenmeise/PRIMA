@@ -41,8 +41,8 @@ var L06_BreakOut_Paddle;
         L06_BreakOut_Paddle.viewport.draw();
         hndCollision();
         paddle.move();
-        //new f.Axis(),
-        //new f.Control();
+        //let axis: f.Axis = new f.Axis("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
+        // let control: f.Control = new f.Control("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
     }
     function hndCollision() {
         for (let wall of walls.getChildren())
