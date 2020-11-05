@@ -1,6 +1,6 @@
 "use strict";
-var L06_BreakOut_Paddle;
-(function (L06_BreakOut_Paddle) {
+var L06_BreakOut_Control;
+(function (L06_BreakOut_Control) {
     var f = FudgeCore;
     let GameObject = /** @class */ (() => {
         class GameObject extends f.Node {
@@ -19,6 +19,6 @@ var L06_BreakOut_Paddle;
         GameObject.mtrSolidWhite = new f.Material("SolidWhite", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("WHITE")));
         return GameObject;
     })();
-    L06_BreakOut_Paddle.GameObject = GameObject;
-})(L06_BreakOut_Paddle || (L06_BreakOut_Paddle = {}));
+    L06_BreakOut_Control.GameObject = GameObject;
+})(L06_BreakOut_Control || (L06_BreakOut_Control = {}));
 //# sourceMappingURL=GameObject.js.map

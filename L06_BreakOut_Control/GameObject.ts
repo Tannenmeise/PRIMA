@@ -1,4 +1,4 @@
-namespace L06_BreakOut_Paddle {
+namespace L06_BreakOut_Control {
   import f = FudgeCore;
 
   export class GameObject extends f.Node {

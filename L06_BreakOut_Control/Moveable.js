@@ -1,9 +1,9 @@
 "use strict";
-var L06_BreakOut_Paddle;
-(function (L06_BreakOut_Paddle) {
+var L06_BreakOut_Control;
+(function (L06_BreakOut_Control) {
     var f = FudgeCore;
     let Moveable = /** @class */ (() => {
-        class Moveable extends L06_BreakOut_Paddle.GameObject {
+        class Moveable extends L06_BreakOut_Control.GameObject {
             constructor(_name, _position, _size) {
                 super(_name, _position, _size);
                 this.speed = 15;
@@ -17,7 +17,10 @@ var L06_BreakOut_Paddle;
             move() {
                 let frameTime = f.Loop.timeFrameGame / 1000;
                 let distance = f.Vector3.SCALE(this.velocity, frameTime);
-                this.mtxLocal.translate(distance);
+                this.translate(distance);
+            }
+            translate(_distance) {
+                this.mtxLocal.translate(_distance);
                 this.rect.position.x = this.mtxLocal.translation.x - this.rect.size.x / 2;
                 this.rect.position.y = this.mtxLocal.translation.y - this.rect.size.y / 2;
             }
@@ -40,6 +43,6 @@ var L06_BreakOut_Paddle;
         Moveable.REFLECT_VECTOR_Y = f.Vector3.Y();
         return Moveable;
     })();
-    L06_BreakOut_Paddle.Moveable = Moveable;
-})(L06_BreakOut_Paddle || (L06_BreakOut_Paddle = {}));
+    L06_BreakOut_Control.Moveable = Moveable;
+})(L06_BreakOut_Control || (L06_BreakOut_Control = {}));
 //# sourceMappingURL=Moveable.js.map

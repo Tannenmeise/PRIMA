@@ -1,4 +1,4 @@
-namespace L06_BreakOut_Paddle {
+namespace L06_BreakOut_Control {
     import f = FudgeCore;
   
     export class Moveable extends GameObject {
@@ -22,12 +22,15 @@ namespace L06_BreakOut_Paddle {
         let frameTime: number = f.Loop.timeFrameGame / 1000;
   
         let distance: f.Vector3 = f.Vector3.SCALE(this.velocity, frameTime);
+        this.translate(distance);
+      }
   
-        this.mtxLocal.translate(distance);
+      public translate(_distance: f.Vector3): void {
+        this.mtxLocal.translate(_distance);
         this.rect.position.x = this.mtxLocal.translation.x - this.rect.size.x / 2;
         this.rect.position.y = this.mtxLocal.translation.y - this.rect.size.y / 2;
       }
-  
+
       /**
        * collides returns if the moveable itself collides with the _target and if so
        * reflects the movement

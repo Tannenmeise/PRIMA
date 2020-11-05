@@ -1,4 +1,4 @@
-namespace L06_BreakOut_Paddle {
+namespace L07_BreakOut {
   import f = FudgeCore;
 
   window.addEventListener("load", hndLoad);
@@ -7,7 +7,10 @@ namespace L06_BreakOut_Paddle {
   let ball: Moveable;
   let walls: f.Node;
   let bricks: f.Node;
-  let paddle: Paddle;
+  let paddle: Moveable;
+
+  let control: f.Control = new f.Control("PaddleControl", 20, f.CONTROL_TYPE.PROPORTIONAL);
+  control.setDelay(200);
 
   export let viewport: f.Viewport;
 
@@ -35,7 +38,7 @@ namespace L06_BreakOut_Paddle {
     addBricks(24);
     root.addChild(bricks);
 
-    paddle = new Paddle("Paddle", new f.Vector2(0, -10), new f.Vector2(6, 1));
+    paddle = new Moveable("Paddle", new f.Vector2(0, -10), new f.Vector2(5, 1));
     root.addChild(paddle);
     // #endregion
 
@@ -50,19 +53,24 @@ namespace L06_BreakOut_Paddle {
     f.Loop.start(f.LOOP_MODE.TIME_GAME, 30);
   }
 
+
   function hndLoop(_event: Event): void {
     ball.move();
     viewport.draw();
 
-    hndCollision();
-
+    control.setInput(
+        f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.A, f.KEYBOARD_CODE.ARROW_LEFT])
+        + f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT])
+    );
+    paddle.velocity = f.Vector3.X(control.getOutput());
     paddle.move();
 
+    hndCollision();
 
-    //let axis: f.Axis = new f.Axis("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
-    // let control: f.Control = new f.Control("string", 1, f.CONTROL_TYPE.DIFFERENTIAL, true);
+
 
   }
+
 
   function hndCollision(): void {
     for (let wall of walls.getChildren())
@@ -72,8 +80,9 @@ namespace L06_BreakOut_Paddle {
       if (ball.checkCollision(brick))
         brick.hit();
 
-    ball.checkCollision(<GameObject>paddle);
+    ball.checkCollision(paddle);
   }
+
 
   function addBricks(_amount: number): void {
     let x: number = -15;
