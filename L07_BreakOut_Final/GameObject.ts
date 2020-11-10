@@ -1,4 +1,4 @@
-namespace L07_BreakOut {
+namespace L07_BreakOut_Final {
   import f = FudgeCore;
 
   export class GameObject extends f.Node {
@@ -7,7 +7,6 @@ namespace L07_BreakOut {
 
     public rect: f.Rectangle;
 
-    
     public constructor(_name: string, _position: f.Vector2, _size: f.Vector2) {
       super(_name);
 

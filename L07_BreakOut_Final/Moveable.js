@@ -1,9 +1,9 @@
 "use strict";
-var L07_BreakOut;
-(function (L07_BreakOut) {
+var L07_BreakOut_Final;
+(function (L07_BreakOut_Final) {
     var f = FudgeCore;
     let Moveable = /** @class */ (() => {
-        class Moveable extends L07_BreakOut.GameObject {
+        class Moveable extends L07_BreakOut_Final.GameObject {
             constructor(_name, _position, _size) {
                 super(_name, _position, _size);
                 this.speed = 15;
@@ -43,6 +43,6 @@ var L07_BreakOut;
         Moveable.REFLECT_VECTOR_Y = f.Vector3.Y();
         return Moveable;
     })();
-    L07_BreakOut.Moveable = Moveable;
-})(L07_BreakOut || (L07_BreakOut = {}));
+    L07_BreakOut_Final.Moveable = Moveable;
+})(L07_BreakOut_Final || (L07_BreakOut_Final = {}));
 //# sourceMappingURL=Moveable.js.map
