@@ -8,7 +8,9 @@ namespace L09_Doom_Control {
     let root: f.Node = new f.Node("Root");
     let avatar: f.Node = new f.Node("Avatar");
 
-    let wall: Wall;
+    let walls: f.Node = new f.Node("Walls");
+    let wall1: Wall;
+    let wall2: Wall;
   
     let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 1, f.CONTROL_TYPE.PROPORTIONAL);
     ctrSpeed.setDelay(100);
@@ -32,8 +34,12 @@ namespace L09_Doom_Control {
       let mtrWall: f.Material = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
   
       // #region (Walls) 
-      wall = new Wall(f.Vector2.ONE(3), f.Vector3.Y(1.5), f.Vector3.ZERO(), mtrWall);
-      root.appendChild(wall);
+      wall1 = new Wall(f.Vector2.ONE(3), f.Vector3.Y(1.5), f.Vector3.ZERO(), mtrWall);
+      wall2 = new Wall(f.Vector2.ONE(3), new f.Vector3(1.8, 1.5, 1.4), f.Vector3.Y(-90), mtrWall);
+
+      walls.appendChild(wall1);
+      walls.appendChild(wall2);
+      root.appendChild(walls);
       // #endregion (Walls)
   
       let cmpCamera: f.ComponentCamera = new f.ComponentCamera();
@@ -67,41 +73,75 @@ namespace L09_Doom_Control {
       avatar.mtxLocal.rotateY(ctrRotation.getOutput());
 
      
-      console.log(wall.mtxLocal.getZ());
       // Check Collision:
 
-      if (checkCollision(wall)) {
-        console.log("Collision = true");
-        let tempPos: f.Vector3 = avatar.mtxLocal.translation;
-        tempPos.x += wall.mtxLocal.getZ().x * 0.1;
-        tempPos.z += wall.mtxLocal.getZ().z * 0.1;
-        
-        avatar.mtxLocal.translation = tempPos;
+      // Only wall1!
+      if (checkCollision(wall2)) {
+        hndleCollision(wall2);
       }
-        /*
-      for (let a_wall of wall.getChildren() as faid.Node[]) {
 
-        if (checkCollision(a_wall)) {
+      //console.log("wall2.mtxLocal.getZ().x = " + wall2.mtxLocal.getZ().x + " and wall2.mtxLocal.getZ().y = " + wall2.mtxLocal.getZ().y + " and wall2.mtxLocal.getZ().z = " + wall2.mtxLocal.getZ().z);
+      
+      /*
+      for (let wall of walls.getChildren() as faid.Node[]) {
+
+        if (checkCollision(wall)) {
             let tempPos: f.Vector3 = avatar.mtxLocal.translation;
-            tempPos.x += wall.mtxLocal.getZ().x * 0.001;
-            tempPos.z += wall.mtxLocal.getZ().z * 0.001;
+            tempPos.x += walls.mtxLocal.getZ().x * 0.1;
+            tempPos.z += walls.mtxLocal.getZ().z * 0.1;
             avatar.mtxLocal.translation = tempPos;
         }
       }
       */
-
-  
       viewport.draw();
     }
 
+    
     function checkCollision(_target: f.Node): boolean {
+      // Wand-Normalenvektor z-Richtung:
+      if (_target.mtxLocal.getZ().z == 1 || _target.mtxLocal.getZ().z == -1) {
+        if (avatar.mtxWorld.translation.x <= _target.mtxWorld.translation.x + 2 && avatar.mtxWorld.translation.x >= _target.mtxWorld.translation.x - 2) {
+          return getDistance(_target);
+        }
+      }
+      // Wand-Normalenvektor x-Richtung:
+      if (_target.mtxLocal.getZ().x == 1 || _target.mtxLocal.getZ().x == -1) {
+        if (avatar.mtxWorld.translation.z <= _target.mtxWorld.translation.z + 2 && avatar.mtxWorld.translation.z >= _target.mtxWorld.translation.z - 2) {
+          return getDistance(_target);
+        }
+      }
+      return false;
+    }
 
+
+    function getDistance(_target: f.Node): boolean {
       let distance: number = (avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x) * _target.mtxLocal.getZ().x + (avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y) * _target.mtxLocal.getZ().y + (avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z) * _target.mtxLocal.getZ().z;
+      console.log(distance);
       if (distance < 1.6) {
         return true;
       }
-  
       return false;
+    }
+
+
+    function hndleCollision(_target: f.Node): void {
+      //console.log("Collision = true");
+      let tempPos: f.Vector3 = avatar.mtxLocal.translation;
+
+      // Wand-Normalenvektor z-Richtung:
+      if (_target.mtxLocal.getZ().z == 1 || _target.mtxLocal.getZ().z == -1) {
+        tempPos.z += wall2.mtxLocal.getZ().z * 0.1;
+      }
+
+      // Wand-Normalenvektor x-Richtung:
+      if (_target.mtxLocal.getZ().x == 1 || _target.mtxLocal.getZ().x == -1) {
+        tempPos.x += wall2.mtxLocal.getZ().x * 0.1;
+      }
+
+      //tempPos.x += wall2.mtxLocal.getZ().x * 0.1;
+      //tempPos.z += wall2.mtxLocal.getZ().z * 0.1;
+      
+      avatar.mtxLocal.translation = tempPos;
     }
 
   }
