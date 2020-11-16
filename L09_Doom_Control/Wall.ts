@@ -12,5 +12,6 @@ namespace L09_Doom_Control {
         cmpMaterial.pivot.scale(f.Vector2.ONE(1));
         this.addComponent(cmpMaterial);
       }
+      
     }
   }

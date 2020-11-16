@@ -125,21 +125,22 @@ var L09_Doom_Control;
     }
     function checkCollision(_target) {
         // Berechnung der Länge des Objektes fehlt! => hier: nur passend für NICHT-VERTIKALE WÄNDE!
+        //console.log(_target.mtxWorld.scaling);
         // Wand-Normalenvektor z-Richtung:
         if (_target.mtxLocal.getZ().z == 1 || _target.mtxLocal.getZ().z == -1) {
             if (avatar.mtxWorld.translation.x <= _target.mtxWorld.translation.x + 2 && avatar.mtxWorld.translation.x >= _target.mtxWorld.translation.x - 2) {
-                return getDistance(_target);
+                return checkDistance(_target);
             }
         }
         // Wand-Normalenvektor x-Richtung:
         if (_target.mtxLocal.getZ().x == 1 || _target.mtxLocal.getZ().x == -1) {
             if (avatar.mtxWorld.translation.z <= _target.mtxWorld.translation.z + 2 && avatar.mtxWorld.translation.z >= _target.mtxWorld.translation.z - 2) {
-                return getDistance(_target);
+                return checkDistance(_target);
             }
         }
         return false;
     }
-    function getDistance(_target) {
+    function checkDistance(_target) {
         let distance = (avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x) * _target.mtxLocal.getZ().x + (avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y) * _target.mtxLocal.getZ().y + (avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z) * _target.mtxLocal.getZ().z;
         if (distance < 1.6 && distance > 0) {
             return true;
