@@ -4,39 +4,18 @@ namespace L09_Doom_Control {
 
   window.addEventListener("load", hndLoad);
 
+  const sizeWall: number = 3;
+  const numWalls: number = 20;
+
   export let viewport: f.Viewport;
   let root: f.Node = new f.Node("Root");
   let avatar: f.Node = new f.Node("Avatar");
+  let walls: f.Node;
 
-  let walls: f.Node = new f.Node("Walls");
-  let wall1: Wall;
-  let wall2: Wall;
-  let wall3: Wall;
-  let wall4: Wall;
-  let wall5: Wall;
-  let wall6: Wall;
-  let wall7: Wall;
-  let wall8: Wall;
-  let wall9: Wall;
-  let wall10: Wall;
-  let wall11: Wall;
-  let wall12: Wall;
-  let wall13: Wall;
-  let wall14: Wall;
-  let wall15: Wall;
-  let wall16: Wall;
-  let wall17: Wall;
-  let wall18: Wall;
-  let wall19: Wall;
-  let wall20: Wall;
-  let wall21: Wall;
-  let wall22: Wall;
-
-  let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 1, f.CONTROL_TYPE.PROPORTIONAL);
+  let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 0.5, f.CONTROL_TYPE.PROPORTIONAL);
   ctrSpeed.setDelay(100);
   let ctrRotation: f.Control = new f.Control("AvatarRotation", 3, f.CONTROL_TYPE.PROPORTIONAL);
   ctrRotation.setDelay(50);
-
 
   function hndLoad(_event: Event): void {
     const canvas: HTMLCanvasElement = document.querySelector("canvas");
@@ -46,145 +25,103 @@ namespace L09_Doom_Control {
     let txtFloor: f.TextureImage = new f.TextureImage("../DoomAssets/DEM1_5.png");
     let mtrFloor: f.Material = new f.Material("Floor", f.ShaderTexture, new f.CoatTextured(null, txtFloor));
     let floor: faid.Node = new faid.Node("Floor", f.Matrix4x4.ROTATION_X(-90), mtrFloor, meshQuad);
-    floor.mtxLocal.scale(f.Vector3.ONE(20));
-    floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(10));
+    floor.mtxLocal.scale(f.Vector3.ONE(sizeWall * numWalls));
+    floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(numWalls));
 
     root.appendChild(floor);
 
-    let txtWall: f.TextureImage = new f.TextureImage("../DoomAssets/CEMPOIS.png");
-    let mtrWall: f.Material = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
-
-    // #region (Walls) 
-    // front
-    wall1 = new Wall(f.Vector2.ONE(3), new f.Vector3(-8.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    wall2 = new Wall(f.Vector2.ONE(3), new f.Vector3(-5.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    wall3 = new Wall(f.Vector2.ONE(3), new f.Vector3(-2.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    wall4 = new Wall(f.Vector2.ONE(3), new f.Vector3(0.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    wall5 = new Wall(f.Vector2.ONE(3), new f.Vector3(3.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    wall6 = new Wall(f.Vector2.ONE(3), new f.Vector3(6.5, 1.5, -10), f.Vector3.ZERO(), mtrWall);
-    // right side
-    wall7 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, -8.5), f.Vector3.Y(-90), mtrWall);
-    wall8 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, -5.5), f.Vector3.Y(-90), mtrWall);
-    wall9 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, -2.5), f.Vector3.Y(-90), mtrWall);
-    wall10 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, 0.5), f.Vector3.Y(-90), mtrWall);
-    wall11 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, 3.5), f.Vector3.Y(-90), mtrWall);
-    wall12 = new Wall(f.Vector2.ONE(3), new f.Vector3(8, 1.5, 6.5), f.Vector3.Y(-90), mtrWall);
-    // middle
-    wall13 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -8.5), f.Vector3.Y(-90), mtrWall);
-    wall14 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -8.5), f.Vector3.Y(90), mtrWall);
-    wall15 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -5.5), f.Vector3.Y(-90), mtrWall);
-    wall16 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -5.5), f.Vector3.Y(90), mtrWall);
-    wall17 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -2.5), f.Vector3.Y(-90), mtrWall);
-    wall18 = new Wall(f.Vector2.ONE(3), new f.Vector3(-4, 1.5, -2.5), f.Vector3.Y(90), mtrWall);
-    wall19 = new Wall(f.Vector2.ONE(3), new f.Vector3(-2.5, 1.5, -1), f.Vector3.ZERO(), mtrWall);
-    wall20 = new Wall(f.Vector2.ONE(3), new f.Vector3(-2.5, 1.5, -1), f.Vector3.Y(180), mtrWall);
-    wall21 = new Wall(f.Vector2.ONE(3), new f.Vector3(0.5, 1.5, -1), f.Vector3.ZERO(), mtrWall);
-    wall22 = new Wall(f.Vector2.ONE(3), new f.Vector3(0.5, 1.5, -1), f.Vector3.Y(180), mtrWall);
-
-    walls.appendChild(wall1);
-    walls.appendChild(wall2);
-    walls.appendChild(wall3);
-    walls.appendChild(wall4);
-    walls.appendChild(wall5);
-    walls.appendChild(wall6);
-    walls.appendChild(wall7);
-    walls.appendChild(wall8);
-    walls.appendChild(wall9);
-    walls.appendChild(wall10);
-    walls.appendChild(wall11);
-    walls.appendChild(wall12);
-    walls.appendChild(wall13);
-    walls.appendChild(wall14);
-    walls.appendChild(wall15);
-    walls.appendChild(wall16);
-    walls.appendChild(wall17);
-    walls.appendChild(wall18);
-    walls.appendChild(wall19);
-    walls.appendChild(wall20);
-    walls.appendChild(wall21);
-    walls.appendChild(wall22);
-
+    walls = createWalls();
     root.appendChild(walls);
-    // #endregion (Walls)
 
     let cmpCamera: f.ComponentCamera = new f.ComponentCamera();
+    cmpCamera.projectCentral(1, 45, f.FIELD_OF_VIEW.DIAGONAL, 0.2, 10000);
     cmpCamera.pivot.translate(f.Vector3.Y(1.7));
     cmpCamera.backgroundColor = f.Color.CSS("darkblue");
+
     avatar.addComponent(cmpCamera);
     avatar.addComponent(new f.ComponentTransform());
-    avatar.mtxLocal.translate(f.Vector3.Z(15));
+    avatar.mtxLocal.translate(f.Vector3.Z(10));
     avatar.mtxLocal.rotate(f.Vector3.Y(180));
     root.appendChild(avatar);
 
     viewport = new f.Viewport();
     viewport.initialize("Viewport", root, cmpCamera, canvas);
+    viewport.draw();
 
     f.Loop.addEventListener(f.EVENT.LOOP_FRAME, hndLoop);
-    f.Loop.start(f.LOOP_MODE.TIME_GAME, 60);
+    f.Loop.start(f.LOOP_MODE.TIME_GAME, 120);
   }
 
-
   function hndLoop(_event: Event): void {
-    // CONTROLS:
     ctrSpeed.setInput(
-      f.Keyboard.mapToValue(-0.2, 0, [f.KEYBOARD_CODE.S, f.KEYBOARD_CODE.ARROW_DOWN])
-      + f.Keyboard.mapToValue(0.2, 0, [f.KEYBOARD_CODE.W, f.KEYBOARD_CODE.ARROW_UP])
+      f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.S, f.KEYBOARD_CODE.ARROW_DOWN])
+      + f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.W, f.KEYBOARD_CODE.ARROW_UP])
     );
     ctrRotation.setInput(
-      f.Keyboard.mapToValue(0.7, 0, [f.KEYBOARD_CODE.A, f.KEYBOARD_CODE.ARROW_LEFT])
-      + f.Keyboard.mapToValue(-0.7, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT])
+      f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.A, f.KEYBOARD_CODE.ARROW_LEFT])
+      + f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT])
     );
-    avatar.mtxLocal.translateZ(ctrSpeed.getOutput());
-    avatar.mtxLocal.rotateY(ctrRotation.getOutput());
 
-    // COLLISION:
-    for (let wall of walls.getChildren() as faid.Node[]) {
-      if (checkCollision(wall)) {
-        hndleCollision(wall);
-      }
-    }
+    moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput());
 
     viewport.draw();
   }
 
-  
-  function checkCollision(_target: f.Node): boolean {
-    // Berechnung der Länge des Objektes fehlt! => hier: nur passend für NICHT-VERTIKALE WÄNDE!
-    //console.log(_target.mtxWorld.scaling);
-    // Wand-Normalenvektor z-Richtung:
-    if (_target.mtxLocal.getZ().z == 1 || _target.mtxLocal.getZ().z == -1) {
-      if (avatar.mtxWorld.translation.x <= _target.mtxWorld.translation.x + 2 && avatar.mtxWorld.translation.x >= _target.mtxWorld.translation.x - 2) {
-        return checkDistance(_target);
+
+  function moveAvatar(_translation: number, _rotation: number): void {
+    avatar.mtxLocal.rotateY(_rotation);
+    let posOld: f.Vector3 = avatar.mtxLocal.translation;
+    avatar.mtxLocal.translateZ(_translation);
+
+    let bouncedOff: Wall[] = bounceOffWalls(<Wall[]>walls.getChildren());
+    if (bouncedOff.length < 2)
+      return;
+
+    bouncedOff = bounceOffWalls(bouncedOff);
+    if (bouncedOff.length == 0)
+      return;
+
+    console.log("Stuck!");
+    avatar.mtxLocal.translation = posOld;
+  }
+
+  function bounceOffWalls(_walls: Wall[]): Wall[] {
+    let bouncedOff: Wall[] = [];
+    let posAvatar: f.Vector3 = avatar.mtxLocal.translation;
+
+    for (let wall of _walls) {
+      let posBounce: f.Vector3 = wall.calculateBounce(posAvatar, 1);
+      if (posBounce) {
+        avatar.mtxLocal.translation = posBounce;
+        bouncedOff.push(wall);
       }
     }
-    // Wand-Normalenvektor x-Richtung:
-    if (_target.mtxLocal.getZ().x == 1 || _target.mtxLocal.getZ().x == -1) {
-      if (avatar.mtxWorld.translation.z <= _target.mtxWorld.translation.z + 2 && avatar.mtxWorld.translation.z >= _target.mtxWorld.translation.z - 2) {
-        return checkDistance(_target);
-      }
+    return bouncedOff;
+  }
+
+  function createWalls(): f.Node {
+    let walls: f.Node = new f.Node("Walls");
+
+    let txtWall: f.TextureImage = new f.TextureImage("../DoomAssets/CEMPOIS.png");
+    let mtrWall: f.Material = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
+
+    walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.Y(sizeWall / 2), f.Vector3.ZERO(), mtrWall));
+    walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(120), mtrWall));
+    walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(-120), mtrWall));
+
+    for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++) {
+      walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
+
+      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
+      walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
+
+      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
+      walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
+
+      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
+      walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
     }
-    return false;
+
+    return walls;
   }
-
-
-  function checkDistance(_target: f.Node): boolean {
-    //let oldDistance: number = (avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x) * _target.mtxLocal.getZ().x + (avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y) * _target.mtxLocal.getZ().y + (avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z) * _target.mtxLocal.getZ().z;
-    let vctAvatar: f.Vector3 = new f.Vector3(avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x,
-                                             avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y,
-                                             avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z);
-    let distance: number = f.Vector3.DOT(vctAvatar, _target.mtxWorld.getZ());
-    if (distance < 1.6 && distance > 0) {
-      return true;
-    }
-    return false;
-  }
-
-
-  function hndleCollision(_target: f.Node): void {
-    let tempPos: f.Vector3 = avatar.mtxLocal.translation;
-    tempPos.z += _target.mtxLocal.getZ().z * 0.1;
-    tempPos.x += _target.mtxLocal.getZ().x * 0.1;
-    avatar.mtxLocal.translation = tempPos;
-  }
-
 }
