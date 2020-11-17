@@ -168,7 +168,11 @@ namespace L09_Doom_Control {
 
 
   function checkDistance(_target: f.Node): boolean {
-    let distance: number = (avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x) * _target.mtxLocal.getZ().x + (avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y) * _target.mtxLocal.getZ().y + (avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z) * _target.mtxLocal.getZ().z;
+    //let oldDistance: number = (avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x) * _target.mtxLocal.getZ().x + (avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y) * _target.mtxLocal.getZ().y + (avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z) * _target.mtxLocal.getZ().z;
+    let vctAvatar: f.Vector3 = new f.Vector3(avatar.mtxWorld.translation.x - _target.mtxWorld.translation.x,
+                                             avatar.mtxWorld.translation.y - _target.mtxWorld.translation.y,
+                                             avatar.mtxWorld.translation.z - _target.mtxWorld.translation.z);
+    let distance: number = f.Vector3.DOT(vctAvatar, _target.mtxWorld.getZ());
     if (distance < 1.6 && distance > 0) {
       return true;
     }
