@@ -1,4 +1,4 @@
-namespace L10_Doom_Mouse {
+namespace L11_Doom_Enemy {
   import f = FudgeCore;
   import faid = FudgeAid;
 
@@ -11,6 +11,7 @@ namespace L10_Doom_Mouse {
   let root: f.Node = new f.Node("Root");
   let avatar: f.Node = new f.Node("Avatar");
   let walls: f.Node;
+  let enemies: f.Node = new f.Node("Enemies");
 
   let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 0.3, f.CONTROL_TYPE.PROPORTIONAL);
   ctrSpeed.setDelay(100);
@@ -24,6 +25,7 @@ namespace L10_Doom_Mouse {
 
     let meshQuad: f.MeshQuad = new f.MeshQuad("Quad");
 
+    // #region (walls & floor)
     let txtFloor: f.TextureImage = new f.TextureImage("../DoomAssets/DEM1_5.png");
     let mtrFloor: f.Material = new f.Material("Floor", f.ShaderTexture, new f.CoatTextured(null, txtFloor));
     let floor: faid.Node = new faid.Node("Floor", f.Matrix4x4.ROTATION_X(-90), mtrFloor, meshQuad);
@@ -34,6 +36,17 @@ namespace L10_Doom_Mouse {
 
     walls = createWalls();
     root.appendChild(walls);
+    // #endregion (walls & floor)
+
+    // #region (enemies)
+    let txtEnemy: f.TextureImage = new f.TextureImage("../DoomAssets/Enemy.png");
+    let mtrEnemy: f.Material = new f.Material("Enemy", f.ShaderTexture, new f.CoatTextured(null, txtEnemy));
+
+    let enemy1: Enemy = new Enemy(f.Vector2.ONE(3), new f.Vector3(5, 1.5, 5), f.Vector3.ZERO(), mtrEnemy);
+    
+    enemies.appendChild(enemy1);
+    root.appendChild(enemies);
+    // #endregion (enemies)
 
     let cmpCamera: f.ComponentCamera = new f.ComponentCamera();
     cmpCamera.projectCentral(1, 45, f.FIELD_OF_VIEW.DIAGONAL, 0.2, 10000);

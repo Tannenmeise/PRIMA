@@ -1,6 +1,6 @@
 "use strict";
-var L10_Doom_Mouse;
-(function (L10_Doom_Mouse) {
+var L11_Doom_Enemy;
+(function (L11_Doom_Enemy) {
     var f = FudgeCore;
     var faid = FudgeAid;
     window.addEventListener("load", hndLoad);
@@ -9,6 +9,7 @@ var L10_Doom_Mouse;
     let root = new f.Node("Root");
     let avatar = new f.Node("Avatar");
     let walls;
+    let enemies = new f.Node("Enemies");
     let ctrSpeed = new f.Control("AvatarSpeed", 0.3, 0 /* PROPORTIONAL */);
     ctrSpeed.setDelay(100);
     let ctrStrafe = new f.Control("AvatarSpeed", 0.1, 0 /* PROPORTIONAL */);
@@ -18,6 +19,7 @@ var L10_Doom_Mouse;
     function hndLoad(_event) {
         const canvas = document.querySelector("canvas");
         let meshQuad = new f.MeshQuad("Quad");
+        // #region (walls & floor)
         let txtFloor = new f.TextureImage("../DoomAssets/DEM1_5.png");
         let mtrFloor = new f.Material("Floor", f.ShaderTexture, new f.CoatTextured(null, txtFloor));
         let floor = new faid.Node("Floor", f.Matrix4x4.ROTATION_X(-90), mtrFloor, meshQuad);
@@ -26,6 +28,14 @@ var L10_Doom_Mouse;
         root.appendChild(floor);
         walls = createWalls();
         root.appendChild(walls);
+        // #endregion (walls & floor)
+        // #region (enemies)
+        let txtEnemy = new f.TextureImage("../DoomAssets/Enemy.png");
+        let mtrEnemy = new f.Material("Enemy", f.ShaderTexture, new f.CoatTextured(null, txtEnemy));
+        let enemy1 = new L11_Doom_Enemy.Enemy(f.Vector2.ONE(3), new f.Vector3(5, 1.5, 5), f.Vector3.ZERO(), mtrEnemy);
+        enemies.appendChild(enemy1);
+        root.appendChild(enemies);
+        // #endregion (enemies)
         let cmpCamera = new f.ComponentCamera();
         cmpCamera.projectCentral(1, 45, f.FIELD_OF_VIEW.DIAGONAL, 0.2, 10000);
         cmpCamera.pivot.translate(f.Vector3.Y(1.7));
@@ -35,9 +45,9 @@ var L10_Doom_Mouse;
         avatar.mtxLocal.translate(f.Vector3.Z(10));
         avatar.mtxLocal.rotate(f.Vector3.Y(180));
         root.appendChild(avatar);
-        L10_Doom_Mouse.viewport = new f.Viewport();
-        L10_Doom_Mouse.viewport.initialize("Viewport", root, cmpCamera, canvas);
-        L10_Doom_Mouse.viewport.draw();
+        L11_Doom_Enemy.viewport = new f.Viewport();
+        L11_Doom_Enemy.viewport.initialize("Viewport", root, cmpCamera, canvas);
+        L11_Doom_Enemy.viewport.draw();
         canvas.addEventListener("mousemove", hndMouse);
         canvas.addEventListener("click", canvas.requestPointerLock);
         f.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, hndLoop);
@@ -50,7 +60,7 @@ var L10_Doom_Mouse;
             + f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT]));
         moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput());
         ctrRotation.setInput(0);
-        L10_Doom_Mouse.viewport.draw();
+        L11_Doom_Enemy.viewport.draw();
     }
     function hndMouse(_event) {
         // console.log(_event.movementX, _event.movementY);
@@ -86,19 +96,19 @@ var L10_Doom_Mouse;
         let walls = new f.Node("Walls");
         let txtWall = new f.TextureImage("../DoomAssets/CEMPOIS.png");
         let mtrWall = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
-        walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.Y(sizeWall / 2), f.Vector3.ZERO(), mtrWall));
-        walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(120), mtrWall));
-        walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(-120), mtrWall));
+        walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.Y(sizeWall / 2), f.Vector3.ZERO(), mtrWall));
+        walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(120), mtrWall));
+        walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(-120), mtrWall));
         for (let i = -numWalls / 2 + 0.5; i < numWalls / 2; i++) {
-            walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
+            walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
+            walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
+            walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L10_Doom_Mouse.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
+            walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
     }
-})(L10_Doom_Mouse || (L10_Doom_Mouse = {}));
+})(L11_Doom_Enemy || (L11_Doom_Enemy = {}));
 //# sourceMappingURL=Main.js.map
