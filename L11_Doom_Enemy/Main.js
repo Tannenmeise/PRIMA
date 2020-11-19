@@ -60,10 +60,10 @@ var L11_Doom_Enemy;
             + f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT]));
         moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput());
         ctrRotation.setInput(0);
+        hndEnemies();
         L11_Doom_Enemy.viewport.draw();
     }
     function hndMouse(_event) {
-        // console.log(_event.movementX, _event.movementY);
         ctrRotation.setInput(_event.movementX);
     }
     function moveAvatar(_speed, _rotation, _strafe) {
@@ -109,6 +109,14 @@ var L11_Doom_Enemy;
             walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
+    }
+    function hndEnemies() {
+        for (let enemy of enemies.getChildren()) {
+            enemy.faceAvatar(enemy, avatar);
+            if (enemy.seesAvatar(enemy, avatar)) {
+                enemy.followAvatar(enemy, avatar);
+            }
+        }
     }
 })(L11_Doom_Enemy || (L11_Doom_Enemy = {}));
 //# sourceMappingURL=Main.js.map

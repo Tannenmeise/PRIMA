@@ -83,11 +83,12 @@ namespace L11_Doom_Enemy {
     moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput());
     ctrRotation.setInput(0);
 
+    hndEnemies();
+
     viewport.draw();
   }
 
   function hndMouse(_event: MouseEvent): void {
-    // console.log(_event.movementX, _event.movementY);
     ctrRotation.setInput(_event.movementX);
   }
 
@@ -148,4 +149,16 @@ namespace L11_Doom_Enemy {
 
     return walls;
   }
+
+
+  function hndEnemies(): void {
+    for (let enemy of enemies.getChildren() as Enemy[]) {
+      enemy.faceAvatar(enemy, avatar);
+      if (enemy.seesAvatar(enemy, avatar)) {
+        enemy.followAvatar(enemy, avatar);
+      }
+    }
+
+  }
+
 }

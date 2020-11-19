@@ -28,6 +28,9 @@ var L11_Doom_Enemy;
                 normal.scale(1.001);
                 return f.Vector3.SUM(intersect, normal);
             }
+            faceAvatar(_target, _avatar) {
+                _target.cmpTransform.showTo(_avatar.mtxWorld.translation);
+            }
         }
         GameObject.meshQuad = new f.MeshQuad();
         return GameObject;
