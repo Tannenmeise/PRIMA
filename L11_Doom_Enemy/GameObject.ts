@@ -37,8 +37,8 @@ namespace L11_Doom_Enemy {
         return f.Vector3.SUM(intersect, normal);
       }
 
-      public faceAvatar(_target: Enemy, _avatar: f.Node): void {
-        _target.cmpTransform.showTo(_avatar.mtxWorld.translation);
+      public faceAvatar(_avatar: f.Node): void {
+        this.cmpTransform.showTo(_avatar.mtxWorld.translation);
       }
     }
   }

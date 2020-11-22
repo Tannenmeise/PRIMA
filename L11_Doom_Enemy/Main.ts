@@ -153,12 +153,38 @@ namespace L11_Doom_Enemy {
 
   function hndEnemies(): void {
     for (let enemy of enemies.getChildren() as Enemy[]) {
-      enemy.faceAvatar(enemy, avatar);
-      if (enemy.seesAvatar(enemy, avatar)) {
-        enemy.followAvatar(enemy, avatar);
+      enemy.faceAvatar(avatar);
+      if (checkDistance(enemy, avatar) && checkFreeSight(enemy, avatar)) {
+        enemy.followAvatar(avatar);
       }
     }
+  }
 
+
+  function checkDistance(_target: Enemy, _avatar: f.Node): boolean {
+    let posAvatar: f.Vector3 = new f.Vector3(_avatar.mtxWorld.translation.x, _avatar.mtxWorld.translation.y, _avatar.mtxWorld.translation.z);
+    let posEnemy: f.Vector3 = new f.Vector3 (_target.mtxWorld.translation.x, _target.mtxWorld.translation.y, _target.mtxWorld.translation.z);
+    
+    let vctAvatar: f.Vector3 = f.Vector3.DIFFERENCE(posAvatar, posEnemy);
+    let distance: number = f.Vector3.DOT(vctAvatar, _target.mtxWorld.getZ());
+
+    if (distance < 20) {
+      return true;
+    }
+    return false;
+  }
+
+
+  function checkFreeSight(_target: Enemy, _avatar: f.Node): boolean {
+    let _walls: Wall[] = bounceOffWalls(<Wall[]>walls.getChildren());
+    let ray: f.Ray = new f.Ray(_target.mtxWorld.getZ(), _target.mtxWorld.translation);
+
+    for (let wall of _walls) {
+      let intersect: f.Vector3 = ray.intersectPlane(wall.mtxWorld.translation, wall.mtxWorld.getZ());
+      if (intersect != null)
+        return false;
+    }
+    return true;
   }
 
 }

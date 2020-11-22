@@ -112,11 +112,31 @@ var L11_Doom_Enemy;
     }
     function hndEnemies() {
         for (let enemy of enemies.getChildren()) {
-            enemy.faceAvatar(enemy, avatar);
-            if (enemy.seesAvatar(enemy, avatar)) {
-                enemy.followAvatar(enemy, avatar);
+            enemy.faceAvatar(avatar);
+            if (checkDistance(enemy, avatar) && checkFreeSight(enemy, avatar)) {
+                enemy.followAvatar(avatar);
             }
         }
+    }
+    function checkDistance(_target, _avatar) {
+        let posAvatar = new f.Vector3(_avatar.mtxWorld.translation.x, _avatar.mtxWorld.translation.y, _avatar.mtxWorld.translation.z);
+        let posEnemy = new f.Vector3(_target.mtxWorld.translation.x, _target.mtxWorld.translation.y, _target.mtxWorld.translation.z);
+        let vctAvatar = f.Vector3.DIFFERENCE(posAvatar, posEnemy);
+        let distance = f.Vector3.DOT(vctAvatar, _target.mtxWorld.getZ());
+        if (distance < 20) {
+            return true;
+        }
+        return false;
+    }
+    function checkFreeSight(_target, _avatar) {
+        let _walls = bounceOffWalls(walls.getChildren());
+        let ray = new f.Ray(_target.mtxWorld.getZ(), _target.mtxWorld.translation);
+        for (let wall of _walls) {
+            let intersect = ray.intersectPlane(wall.mtxWorld.translation, wall.mtxWorld.getZ());
+            if (intersect != null)
+                return false;
+        }
+        return true;
     }
 })(L11_Doom_Enemy || (L11_Doom_Enemy = {}));
 //# sourceMappingURL=Main.js.map
