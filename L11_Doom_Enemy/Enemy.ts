@@ -12,8 +12,10 @@ namespace L11_Doom_Enemy {
       }
 
 
-      public followAvatar(_avatar: f.Node): void {
-        this.mtxLocal.translate(f.Vector3.SCALE(this.mtxWorld.getZ(), 0.03));
+      public followAvatar(): void {
+        // Only works when the enemy also does the faceAvatar()-Action:
+        //this.mtxLocal.translate(f.Vector3.SCALE(this.mtxWorld.getZ(), 0.03));
+        this.mtxLocal.translateZ(0.05);
       }
 
     }

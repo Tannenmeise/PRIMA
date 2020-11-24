@@ -35,6 +35,14 @@ namespace L11_Doom_Enemy {
     root.appendChild(floor);
 
     walls = createWalls();
+
+    // FOR FREESIGHT TEST:
+    let txtWall: f.TextureImage = new f.TextureImage("../DoomAssets/CEMPOIS.png");
+    let mtrWall: f.Material = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
+
+    walls.appendChild(new Wall(f.Vector2.ONE(3), new f.Vector3(4, sizeWall / 2, 1), f.Vector3.ZERO(), mtrWall));
+    //
+
     root.appendChild(walls);
     // #endregion (walls & floor)
 
@@ -136,14 +144,8 @@ namespace L11_Doom_Enemy {
 
     for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++) {
       walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
-
-      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
       walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
-
-      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
       walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
-
-      // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
       walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
     }
 
@@ -155,7 +157,7 @@ namespace L11_Doom_Enemy {
     for (let enemy of enemies.getChildren() as Enemy[]) {
       enemy.faceAvatar(avatar);
       if (checkDistance(enemy, avatar) && checkFreeSight(enemy, avatar)) {
-        enemy.followAvatar(avatar);
+        enemy.followAvatar();
       }
     }
   }

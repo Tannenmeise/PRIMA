@@ -27,6 +27,11 @@ var L11_Doom_Enemy;
         floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(numWalls));
         root.appendChild(floor);
         walls = createWalls();
+        // FOR FREESIGHT TEST:
+        let txtWall = new f.TextureImage("../DoomAssets/CEMPOIS.png");
+        let mtrWall = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
+        walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), new f.Vector3(4, sizeWall / 2, 1), f.Vector3.ZERO(), mtrWall));
+        //
         root.appendChild(walls);
         // #endregion (walls & floor)
         // #region (enemies)
@@ -101,11 +106,8 @@ var L11_Doom_Enemy;
         walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), sizeWall / 2), f.Vector3.Y(-120), mtrWall));
         for (let i = -numWalls / 2 + 0.5; i < numWalls / 2; i++) {
             walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L11_Doom_Enemy.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
@@ -114,7 +116,7 @@ var L11_Doom_Enemy;
         for (let enemy of enemies.getChildren()) {
             enemy.faceAvatar(avatar);
             if (checkDistance(enemy, avatar) && checkFreeSight(enemy, avatar)) {
-                enemy.followAvatar(avatar);
+                enemy.followAvatar();
             }
         }
     }

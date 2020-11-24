@@ -9,8 +9,10 @@ var L11_Doom_Enemy;
             cmpMaterial.pivot.scale(f.Vector2.ONE(1));
             this.addComponent(cmpMaterial);
         }
-        followAvatar(_avatar) {
-            this.mtxLocal.translate(f.Vector3.SCALE(this.mtxWorld.getZ(), 0.03));
+        followAvatar() {
+            // Only works when the enemy also does the faceAvatar()-Action:
+            //this.mtxLocal.translate(f.Vector3.SCALE(this.mtxWorld.getZ(), 0.03));
+            this.mtxLocal.translateZ(0.05);
         }
     }
     L11_Doom_Enemy.Enemy = Enemy;
