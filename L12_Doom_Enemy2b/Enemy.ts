@@ -1,4 +1,4 @@
-namespace L11_Doom_Enemy {
+namespace L12_Doom_Enemy2b {
   import f = FudgeCore;
   import faid = FudgeAid;
 

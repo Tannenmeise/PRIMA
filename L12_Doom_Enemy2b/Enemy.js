@@ -1,6 +1,6 @@
 "use strict";
-var L11_Doom_Enemy;
-(function (L11_Doom_Enemy) {
+var L12_Doom_Enemy2b;
+(function (L12_Doom_Enemy2b) {
     var f = FudgeCore;
     var faid = FudgeAid;
     let ANGLE;
@@ -14,7 +14,7 @@ var L11_Doom_Enemy;
         ANGLE[ANGLE["_225"] = 5] = "_225";
         ANGLE[ANGLE["_270"] = 6] = "_270";
         ANGLE[ANGLE["_315"] = 7] = "_315";
-    })(ANGLE = L11_Doom_Enemy.ANGLE || (L11_Doom_Enemy.ANGLE = {}));
+    })(ANGLE = L12_Doom_Enemy2b.ANGLE || (L12_Doom_Enemy2b.ANGLE = {}));
     class Enemy extends f.Node {
         // private static speedMax: number = 1; // units per second
         // public direction: number = 0; 
@@ -51,7 +51,7 @@ var L11_Doom_Enemy;
         move() {
             this.mtxLocal.showTo(this.posTarget);
             this.mtxLocal.translateZ(this.speed * f.Loop.timeFrameGame / 1000);
-            this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L11_Doom_Enemy.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
+            this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L12_Doom_Enemy2b.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
         }
         chooseTargetPosition() {
             let range = 5; //sizeWall * numWalls / 2 - 2;
@@ -59,6 +59,6 @@ var L11_Doom_Enemy;
             console.log("New target", this.posTarget.toString());
         }
     }
-    L11_Doom_Enemy.Enemy = Enemy;
-})(L11_Doom_Enemy || (L11_Doom_Enemy = {}));
+    L12_Doom_Enemy2b.Enemy = Enemy;
+})(L12_Doom_Enemy2b || (L12_Doom_Enemy2b = {}));
 //# sourceMappingURL=Enemy.js.map
