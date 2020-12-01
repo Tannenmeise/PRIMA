@@ -23,6 +23,7 @@ namespace L12_Doom_Enemy2b {
     let ctrRotation: f.Control = new f.Control("AvatarRotation", -0.1, f.CONTROL_TYPE.PROPORTIONAL);
     ctrRotation.setDelay(100);
   
+
     async function hndLoad(_event: Event): Promise<void> {
       const canvas: HTMLCanvasElement = document.querySelector("canvas");
   
@@ -72,6 +73,7 @@ namespace L12_Doom_Enemy2b {
       f.Loop.start(f.LOOP_MODE.TIME_GAME, 120);
     }
   
+
     function hndLoop(_event: Event): void {
       ctrSpeed.setInput(
         f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.S, f.KEYBOARD_CODE.ARROW_DOWN])
@@ -89,16 +91,16 @@ namespace L12_Doom_Enemy2b {
         enemy.update();
 
         
-      console.log(getAngleBetweenVectors(test.mtxLocal.getZ(), avatar.mtxWorld.translation));
-        
       viewport.draw();
     }
   
+
     function hndMouse(_event: MouseEvent): void {
       // console.log(_event.movementX, _event.movementY);
       ctrRotation.setInput(_event.movementX);
     }
   
+
     function moveAvatar(_speed: number, _rotation: number, _strafe: number): void {
       avatar.mtxLocal.rotateY(_rotation);
       let posOld: f.Vector3 = avatar.mtxLocal.translation;
@@ -117,6 +119,7 @@ namespace L12_Doom_Enemy2b {
       avatar.mtxLocal.translation = posOld;
     }
   
+
     function bounceOffWalls(_walls: Wall[]): Wall[] {
       let bouncedOff: Wall[] = [];
       let posAvatar: f.Vector3 = avatar.mtxLocal.translation;
@@ -131,6 +134,7 @@ namespace L12_Doom_Enemy2b {
       return bouncedOff;
     }
   
+
     async function createEnemies(): Promise<f.Node> {
       let enemies: f.Node = new f.Node("Enemies");
   
@@ -139,13 +143,14 @@ namespace L12_Doom_Enemy2b {
       let coatSprite: f.CoatTextured = new f.CoatTextured(clrWhite, txtCacodemon);
       Enemy.generateSprites(coatSprite);
       enemies.appendChild(new Enemy("Cacodemon0", f.Vector3.Z(3)));
-      enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
-      enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
+      //enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
+      //enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
       
       console.log("Enemies", enemies);
       return enemies;
     }
   
+
     function createWalls(): f.Node {
       let walls: f.Node = new f.Node("Walls");
   
@@ -172,8 +177,4 @@ namespace L12_Doom_Enemy2b {
       return walls;
     }
 
-
-    function getAngleBetweenVectors(u: f.Vector3, v: f.Vector3): number {
-      return Math.acos((u.x * v.x + u.y * v.y + u.z * v.z) / (Math.sqrt((Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2))) * (Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))))));
-    }
   }

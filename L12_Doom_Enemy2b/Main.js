@@ -63,7 +63,6 @@ var L12_Doom_Enemy2b;
         ctrRotation.setInput(0);
         for (let enemy of enemies.getChildren())
             enemy.update();
-        console.log(getAngleBetweenVectors(test.mtxLocal.getZ(), L12_Doom_Enemy2b.avatar.mtxWorld.translation));
         L12_Doom_Enemy2b.viewport.draw();
     }
     function hndMouse(_event) {
@@ -103,8 +102,8 @@ var L12_Doom_Enemy2b;
         let coatSprite = new f.CoatTextured(clrWhite, txtCacodemon);
         L12_Doom_Enemy2b.Enemy.generateSprites(coatSprite);
         enemies.appendChild(new L12_Doom_Enemy2b.Enemy("Cacodemon0", f.Vector3.Z(3)));
-        enemies.appendChild(new L12_Doom_Enemy2b.Enemy("Cacodemon1", f.Vector3.X(3)));
-        enemies.appendChild(new L12_Doom_Enemy2b.Enemy("Cacodemon2", f.Vector3.X(-3)));
+        //enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
+        //enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
         console.log("Enemies", enemies);
         return enemies;
     }
@@ -125,9 +124,6 @@ var L12_Doom_Enemy2b;
             walls.appendChild(new L12_Doom_Enemy2b.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, L12_Doom_Enemy2b.numWalls / 2), L12_Doom_Enemy2b.sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
-    }
-    function getAngleBetweenVectors(u, v) {
-        return Math.acos((u.x * v.x + u.y * v.y + u.z * v.z) / (Math.sqrt((Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2))) * (Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))))));
     }
 })(L12_Doom_Enemy2b || (L12_Doom_Enemy2b = {}));
 //# sourceMappingURL=Main.js.map

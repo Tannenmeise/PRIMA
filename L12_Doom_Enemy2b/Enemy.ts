@@ -41,6 +41,7 @@ namespace L12_Doom_Enemy2b {
     }
 
 
+    // Generates Animations from "Idle_000"(0°) to "Idle_180"(180°) (total:5):
     public static generateSprites(_spritesheet: f.CoatTextured): void {
       Enemy.animations = {};
       for (let angle: number = 0; angle < 5; angle++) {
@@ -51,7 +52,21 @@ namespace L12_Doom_Enemy2b {
       }
     }
 
+
     public update(): void {
+
+      let angle: number = this.getAngleBetweenVectors(avatar.mtxWorld.translation);
+      if (angle < Math.PI / 8)
+        this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle_000"]);
+      else if (angle > Math.PI / 8 && angle < 3 * Math.PI / 8)
+        this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle_045"]);
+      else if (angle > 3 * Math.PI / 8 && angle < 5 * Math.PI / 8)
+        this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle_090"]);
+      else if (angle > 5 * Math.PI / 8 && angle < 7 * Math.PI / 8)
+        this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle_135"]);
+      else if (angle > 7 * Math.PI / 8)
+        this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle_180"]);
+
 
       if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
         this.chooseTargetPosition();
@@ -59,16 +74,22 @@ namespace L12_Doom_Enemy2b {
       this.move();
     }
 
+
     private move(): void {
       this.mtxLocal.showTo(this.posTarget);
       this.mtxLocal.translateZ(this.speed * f.Loop.timeFrameGame / 1000);
       this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(avatar.mtxLocal.translation, this.mtxWorldInverse, true));
     }
 
+
     private chooseTargetPosition(): void {
       let range: number = 5; //sizeWall * numWalls / 2 - 2;
       this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
       console.log("New target", this.posTarget.toString());
+    }
+
+    private getAngleBetweenVectors(v: f.Vector3): number {
+      return Math.acos((this.mtxLocal.getZ().x * v.x + this.mtxLocal.getZ().y * v.y + this.mtxLocal.getZ().z * v.z) / (Math.sqrt((Math.pow(this.mtxLocal.getZ().x, 2) + Math.pow(this.mtxLocal.getZ().y, 2) + Math.pow(this.mtxLocal.getZ().z, 2))) * (Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))))));
     }
   }
 }

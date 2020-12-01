@@ -34,6 +34,7 @@ var L12_Doom_Enemy2b;
             this.posTarget = _position;
             // this.appendChild(new faid.Node("Cube", f.Matrix4x4.IDENTITY(), new f.Material("Cube", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("red"))), new f.MeshCube()));
         }
+        // Generates Animations from "Idle_000"(0°) to "Idle_180"(180°) (total:5):
         static generateSprites(_spritesheet) {
             Enemy.animations = {};
             for (let angle = 0; angle < 5; angle++) {
@@ -44,6 +45,17 @@ var L12_Doom_Enemy2b;
             }
         }
         update() {
+            let angle = this.getAngleBetweenVectors(L12_Doom_Enemy2b.avatar.mtxWorld.translation);
+            if (angle < Math.PI / 8)
+                this.sprite.setAnimation(Enemy.animations["Idle_000"]);
+            else if (angle > Math.PI / 8 && angle < 3 * Math.PI / 8)
+                this.sprite.setAnimation(Enemy.animations["Idle_045"]);
+            else if (angle > 3 * Math.PI / 8 && angle < 5 * Math.PI / 8)
+                this.sprite.setAnimation(Enemy.animations["Idle_090"]);
+            else if (angle > 5 * Math.PI / 8 && angle < 7 * Math.PI / 8)
+                this.sprite.setAnimation(Enemy.animations["Idle_135"]);
+            else if (angle > 7 * Math.PI / 8)
+                this.sprite.setAnimation(Enemy.animations["Idle_180"]);
             if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
                 this.chooseTargetPosition();
             this.move();
@@ -57,6 +69,9 @@ var L12_Doom_Enemy2b;
             let range = 5; //sizeWall * numWalls / 2 - 2;
             this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
             console.log("New target", this.posTarget.toString());
+        }
+        getAngleBetweenVectors(v) {
+            return Math.acos((this.mtxLocal.getZ().x * v.x + this.mtxLocal.getZ().y * v.y + this.mtxLocal.getZ().z * v.z) / (Math.sqrt((Math.pow(this.mtxLocal.getZ().x, 2) + Math.pow(this.mtxLocal.getZ().y, 2) + Math.pow(this.mtxLocal.getZ().z, 2))) * (Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))))));
         }
     }
     L12_Doom_Enemy2b.Enemy = Enemy;
