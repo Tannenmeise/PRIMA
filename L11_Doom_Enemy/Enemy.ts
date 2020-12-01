@@ -8,7 +8,7 @@ namespace L11_Doom_Enemy {
   }
 
   export enum JOB {
-    IDLE, PATROL
+    IDLE, PATROL, ATTACK
   }
 
 
@@ -64,17 +64,27 @@ namespace L11_Doom_Enemy {
 
       switch (this.job) {
         case JOB.PATROL:
-          if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
+          if (this.distance() < 10) {
+            this.job = JOB.ATTACK;
+          } else if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
             this.job = JOB.IDLE;
-            // this.chooseTargetPosition();
           this.move();
           break;
         case JOB.IDLE:
           this.breakTime++;
           if (this.breakTime > Math.random() * 3000) {
+            this.breakTime = 0;
             this.chooseTargetPosition();
             this.job = JOB.PATROL;
           }
+          break;
+        case JOB.ATTACK:
+          if (this.distance() > 15) {
+            this.job = JOB.IDLE;
+          }
+          this.posTarget = avatar.mtxLocal.translation;
+          this.move();
+          break;
         default:
           break;
       }
@@ -121,5 +131,12 @@ namespace L11_Doom_Enemy {
     private flip(_reverse: boolean): void {
       this.sprite.mtxLocal.rotation = f.Vector3.Y(_reverse ? 180 : 0);
     }
+
+    private distance(): number {
+      let vctAvatar: f.Vector3 = f.Vector3.DIFFERENCE(avatar.mtxWorld.translation, this.mtxLocal.translation);
+      let distance: number = f.Vector3.DOT(vctAvatar, this.mtxWorld.getZ());
+      return distance;
+    }
+
   }
 }

@@ -19,6 +19,7 @@ var L11_Doom_Enemy;
     (function (JOB) {
         JOB[JOB["IDLE"] = 0] = "IDLE";
         JOB[JOB["PATROL"] = 1] = "PATROL";
+        JOB[JOB["ATTACK"] = 2] = "ATTACK";
     })(JOB = L11_Doom_Enemy.JOB || (L11_Doom_Enemy.JOB = {}));
     class Enemy extends f.Node {
         // private static speedMax: number = 1; // units per second
@@ -56,17 +57,28 @@ var L11_Doom_Enemy;
         update() {
             switch (this.job) {
                 case JOB.PATROL:
-                    if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
+                    if (this.distance() < 10) {
+                        this.job = JOB.ATTACK;
+                    }
+                    else if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
                         this.job = JOB.IDLE;
-                    // this.chooseTargetPosition();
                     this.move();
                     break;
                 case JOB.IDLE:
                     this.breakTime++;
                     if (this.breakTime > Math.random() * 3000) {
+                        this.breakTime = 0;
                         this.chooseTargetPosition();
                         this.job = JOB.PATROL;
                     }
+                    break;
+                case JOB.ATTACK:
+                    if (this.distance() > 15) {
+                        this.job = JOB.IDLE;
+                    }
+                    this.posTarget = L11_Doom_Enemy.avatar.mtxLocal.translation;
+                    this.move();
+                    break;
                 default:
                     break;
             }
@@ -101,6 +113,11 @@ var L11_Doom_Enemy;
         }
         flip(_reverse) {
             this.sprite.mtxLocal.rotation = f.Vector3.Y(_reverse ? 180 : 0);
+        }
+        distance() {
+            let vctAvatar = f.Vector3.DIFFERENCE(L11_Doom_Enemy.avatar.mtxWorld.translation, this.mtxLocal.translation);
+            let distance = f.Vector3.DOT(vctAvatar, this.mtxWorld.getZ());
+            return distance;
         }
     }
     L11_Doom_Enemy.Enemy = Enemy;
