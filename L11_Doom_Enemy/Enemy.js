@@ -66,7 +66,11 @@ var L11_Doom_Enemy;
                     break;
                 case JOB.IDLE:
                     this.breakTime++;
-                    if (this.breakTime > Math.random() * 3000) {
+                    if (this.distance() < 10) {
+                        this.breakTime = 0;
+                        this.job = JOB.ATTACK;
+                    }
+                    else if (this.breakTime > Math.random() * 3000) {
                         this.breakTime = 0;
                         this.chooseTargetPosition();
                         this.job = JOB.PATROL;
@@ -82,6 +86,7 @@ var L11_Doom_Enemy;
                 default:
                     break;
             }
+            // PROBLEM!!!: ENEMIES FACE AVATAR WHEN HITTING "IDLE"-STATE
             this.displayAnimation();
         }
         move() {
