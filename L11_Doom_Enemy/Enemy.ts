@@ -20,6 +20,7 @@ namespace L11_Doom_Enemy {
     private posTarget: f.Vector3;
     private angleView: number = 0;
     private job: JOB = JOB.PATROL;
+    private breakTime: number = 0;
     // private static speedMax: number = 1; // units per second
     // public direction: number = 0; 
 
@@ -64,11 +65,16 @@ namespace L11_Doom_Enemy {
       switch (this.job) {
         case JOB.PATROL:
           if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
-            // this.chooseTargetPosition();
             this.job = JOB.IDLE;
+            // this.chooseTargetPosition();
           this.move();
           break;
         case JOB.IDLE:
+          this.breakTime++;
+          if (this.breakTime > Math.random() * 3000) {
+            this.chooseTargetPosition();
+            this.job = JOB.PATROL;
+          }
         default:
           break;
       }
@@ -102,14 +108,14 @@ namespace L11_Doom_Enemy {
         this.flip(false);
 
       let section: string = ANGLE[rotation]; // .padStart(3, "0");
-      console.log(section);
+      // console.log(section);
       this.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Idle" + section]);
     }
 
     private chooseTargetPosition(): void {
       let range: number = sizeWall * numWalls / 2 - 2;
       this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
-      console.log("New target", this.posTarget.toString());
+      // console.log("New target", this.posTarget.toString());
     }
 
     private flip(_reverse: boolean): void {

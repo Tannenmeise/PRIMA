@@ -28,6 +28,7 @@ var L11_Doom_Enemy;
             this.speed = 3;
             this.angleView = 0;
             this.job = JOB.PATROL;
+            this.breakTime = 0;
             this.addComponent(new f.ComponentTransform());
             this.mtxLocal.translation = _position;
             this.show = new faid.Node("Show", f.Matrix4x4.IDENTITY());
@@ -56,11 +57,16 @@ var L11_Doom_Enemy;
             switch (this.job) {
                 case JOB.PATROL:
                     if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
-                        // this.chooseTargetPosition();
                         this.job = JOB.IDLE;
+                    // this.chooseTargetPosition();
                     this.move();
                     break;
                 case JOB.IDLE:
+                    this.breakTime++;
+                    if (this.breakTime > Math.random() * 3000) {
+                        this.chooseTargetPosition();
+                        this.job = JOB.PATROL;
+                    }
                 default:
                     break;
             }
@@ -85,13 +91,13 @@ var L11_Doom_Enemy;
             else
                 this.flip(false);
             let section = ANGLE[rotation]; // .padStart(3, "0");
-            console.log(section);
+            // console.log(section);
             this.sprite.setAnimation(Enemy.animations["Idle" + section]);
         }
         chooseTargetPosition() {
             let range = L11_Doom_Enemy.sizeWall * L11_Doom_Enemy.numWalls / 2 - 2;
             this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
-            console.log("New target", this.posTarget.toString());
+            // console.log("New target", this.posTarget.toString());
         }
         flip(_reverse) {
             this.sprite.mtxLocal.rotation = f.Vector3.Y(_reverse ? 180 : 0);
