@@ -1,4 +1,4 @@
-namespace L11_Doom_Enemy {
+namespace L12_Doom_UI {
   import f = FudgeCore;
   import faid = FudgeAid;
 
@@ -61,27 +61,28 @@ namespace L11_Doom_Enemy {
 
     public update(): void {
 
+
       switch (this.job) {
         case JOB.PATROL:
-          if (this.distance() < 10) { // sees Avatar
+          if (this.distance() < 10) {
             this.job = JOB.ATTACK;
-          } else if (this.mtxLocal.translation.equals(this.posTarget, 0.1)) // reached Target
+          } else if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
             this.job = JOB.IDLE;
           this.move();
           break;
         case JOB.IDLE:
-          if (this.distance() < 10) { // sees Avatar
-            this.job = JOB.ATTACK;
-            this.breakTime = 0;
-          } else if (this.breakTime > Math.random() * 3000) { // breakTime over
-            this.job = JOB.PATROL;
-            this.chooseTargetPosition();
-            this.breakTime = 0;
-          }
           this.breakTime++;
+          if (this.distance() < 10) {
+            this.breakTime = 0;
+            this.job = JOB.ATTACK;
+          } else if (this.breakTime > Math.random() * 3000) {
+            this.breakTime = 0;
+            this.chooseTargetPosition();
+            this.job = JOB.PATROL;
+          }
           break;
         case JOB.ATTACK:
-          if (this.distance() > 15) { // lost Avatar
+          if (this.distance() > 15) {
             this.job = JOB.IDLE;
           }
           this.posTarget = avatar.mtxLocal.translation;

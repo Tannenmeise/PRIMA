@@ -1,6 +1,6 @@
 "use strict";
-var L11_Doom_Enemy;
-(function (L11_Doom_Enemy) {
+var L12_Doom_UI;
+(function (L12_Doom_UI) {
     var f = FudgeCore;
     var faid = FudgeAid;
     let ANGLE;
@@ -14,13 +14,13 @@ var L11_Doom_Enemy;
         ANGLE[ANGLE["_225"] = 5] = "_225";
         ANGLE[ANGLE["_270"] = 6] = "_270";
         ANGLE[ANGLE["_315"] = 7] = "_315";
-    })(ANGLE = L11_Doom_Enemy.ANGLE || (L11_Doom_Enemy.ANGLE = {}));
+    })(ANGLE = L12_Doom_UI.ANGLE || (L12_Doom_UI.ANGLE = {}));
     let JOB;
     (function (JOB) {
         JOB[JOB["IDLE"] = 0] = "IDLE";
         JOB[JOB["PATROL"] = 1] = "PATROL";
         JOB[JOB["ATTACK"] = 2] = "ATTACK";
-    })(JOB = L11_Doom_Enemy.JOB || (L11_Doom_Enemy.JOB = {}));
+    })(JOB = L12_Doom_UI.JOB || (L12_Doom_UI.JOB = {}));
     class Enemy extends f.Node {
         // private static speedMax: number = 1; // units per second
         // public direction: number = 0; 
@@ -57,30 +57,30 @@ var L11_Doom_Enemy;
         update() {
             switch (this.job) {
                 case JOB.PATROL:
-                    if (this.distance() < 10) { // sees Avatar
+                    if (this.distance() < 10) {
                         this.job = JOB.ATTACK;
                     }
-                    else if (this.mtxLocal.translation.equals(this.posTarget, 0.1)) // reached Target
+                    else if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
                         this.job = JOB.IDLE;
                     this.move();
                     break;
                 case JOB.IDLE:
-                    if (this.distance() < 10) { // sees Avatar
-                        this.job = JOB.ATTACK;
-                        this.breakTime = 0;
-                    }
-                    else if (this.breakTime > Math.random() * 3000) { // breakTime over
-                        this.job = JOB.PATROL;
-                        this.chooseTargetPosition();
-                        this.breakTime = 0;
-                    }
                     this.breakTime++;
+                    if (this.distance() < 10) {
+                        this.breakTime = 0;
+                        this.job = JOB.ATTACK;
+                    }
+                    else if (this.breakTime > Math.random() * 3000) {
+                        this.breakTime = 0;
+                        this.chooseTargetPosition();
+                        this.job = JOB.PATROL;
+                    }
                     break;
                 case JOB.ATTACK:
-                    if (this.distance() > 15) { // lost Avatar
+                    if (this.distance() > 15) {
                         this.job = JOB.IDLE;
                     }
-                    this.posTarget = L11_Doom_Enemy.avatar.mtxLocal.translation;
+                    this.posTarget = L12_Doom_UI.avatar.mtxLocal.translation;
                     this.move();
                     break;
                 default:
@@ -94,7 +94,7 @@ var L11_Doom_Enemy;
             this.mtxLocal.translateZ(this.speed * f.Loop.timeFrameGame / 1000);
         }
         displayAnimation() {
-            this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L11_Doom_Enemy.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
+            this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L12_Doom_UI.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
             let rotation = this.show.mtxLocal.rotation.y;
             rotation = (rotation + 360 + 22.5) % 360;
             rotation = Math.floor(rotation / 45);
@@ -112,7 +112,7 @@ var L11_Doom_Enemy;
             this.sprite.setAnimation(Enemy.animations["Idle" + section]);
         }
         chooseTargetPosition() {
-            let range = L11_Doom_Enemy.sizeWall * L11_Doom_Enemy.numWalls / 2 - 2;
+            let range = L12_Doom_UI.sizeWall * L12_Doom_UI.numWalls / 2 - 2;
             this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
             // console.log("New target", this.posTarget.toString());
         }
@@ -120,11 +120,11 @@ var L11_Doom_Enemy;
             this.sprite.mtxLocal.rotation = f.Vector3.Y(_reverse ? 180 : 0);
         }
         distance() {
-            let vctAvatar = f.Vector3.DIFFERENCE(L11_Doom_Enemy.avatar.mtxWorld.translation, this.mtxLocal.translation);
+            let vctAvatar = f.Vector3.DIFFERENCE(L12_Doom_UI.avatar.mtxWorld.translation, this.mtxLocal.translation);
             let distance = f.Vector3.DOT(vctAvatar, this.mtxWorld.getZ());
             return distance;
         }
     }
-    L11_Doom_Enemy.Enemy = Enemy;
-})(L11_Doom_Enemy || (L11_Doom_Enemy = {}));
+    L12_Doom_UI.Enemy = Enemy;
+})(L12_Doom_UI || (L12_Doom_UI = {}));
 //# sourceMappingURL=Enemy.js.map
