@@ -61,28 +61,27 @@ namespace L12_Doom_UI {
 
     public update(): void {
 
-
       switch (this.job) {
         case JOB.PATROL:
-          if (this.distance() < 10) {
+          if (this.distance() < 10) { // sees Avatar
             this.job = JOB.ATTACK;
-          } else if (this.mtxLocal.translation.equals(this.posTarget, 0.1))
+          } else if (this.mtxLocal.translation.equals(this.posTarget, 0.1)) // reached Target
             this.job = JOB.IDLE;
           this.move();
           break;
         case JOB.IDLE:
-          this.breakTime++;
-          if (this.distance() < 10) {
-            this.breakTime = 0;
+          if (this.distance() < 10) { // sees Avatar
             this.job = JOB.ATTACK;
-          } else if (this.breakTime > Math.random() * 3000) {
             this.breakTime = 0;
-            this.chooseTargetPosition();
+          } else if (this.breakTime > Math.random() * 3000) { // breakTime over
             this.job = JOB.PATROL;
+            this.chooseTargetPosition();
+            this.breakTime = 0;
           }
+          this.breakTime++;
           break;
         case JOB.ATTACK:
-          if (this.distance() > 15) {
+          if (this.distance() > 15) { // lost Avatar
             this.job = JOB.IDLE;
           }
           this.posTarget = avatar.mtxLocal.translation;
