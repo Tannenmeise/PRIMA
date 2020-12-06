@@ -1,13 +1,16 @@
 "use strict";
-var L12_Doom_UI;
-(function (L12_Doom_UI) {
+var L13_Doom_UIb;
+(function (L13_Doom_UIb) {
     var f = FudgeCore;
     var faid = FudgeAid;
     window.addEventListener("load", hndLoad);
     const clrWhite = f.Color.CSS("white");
-    L12_Doom_UI.sizeWall = 3;
-    L12_Doom_UI.numWalls = 20;
-    L12_Doom_UI.avatar = new f.Node("Avatar");
+    L13_Doom_UIb.sizeWall = 3;
+    L13_Doom_UIb.numWalls = 20;
+    L13_Doom_UIb.avatar = new f.Node("Avatar");
+    L13_Doom_UIb.ammo = 100;
+    L13_Doom_UIb.health = 100;
+    L13_Doom_UIb.armor = 100;
     let root = new f.Node("Root");
     let walls;
     let enemies;
@@ -23,8 +26,8 @@ var L12_Doom_UI;
         let txtFloor = new f.TextureImage("../DoomAssets/DEM1_5.png");
         let mtrFloor = new f.Material("Floor", f.ShaderTexture, new f.CoatTextured(clrWhite, txtFloor));
         let floor = new faid.Node("Floor", f.Matrix4x4.ROTATION_X(-90), mtrFloor, meshQuad);
-        floor.mtxLocal.scale(f.Vector3.ONE(L12_Doom_UI.sizeWall * L12_Doom_UI.numWalls));
-        floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(L12_Doom_UI.numWalls));
+        floor.mtxLocal.scale(f.Vector3.ONE(L13_Doom_UIb.sizeWall * L13_Doom_UIb.numWalls));
+        floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(L13_Doom_UIb.numWalls));
         root.appendChild(floor);
         walls = createWalls();
         root.appendChild(walls);
@@ -34,14 +37,14 @@ var L12_Doom_UI;
         cmpCamera.projectCentral(1, 45, f.FIELD_OF_VIEW.DIAGONAL, 0.2, 10000);
         cmpCamera.pivot.translate(f.Vector3.Y(1.7));
         cmpCamera.backgroundColor = f.Color.CSS("darkblue");
-        L12_Doom_UI.avatar.addComponent(cmpCamera);
-        L12_Doom_UI.avatar.addComponent(new f.ComponentTransform());
-        L12_Doom_UI.avatar.mtxLocal.translate(f.Vector3.Z(10));
-        L12_Doom_UI.avatar.mtxLocal.rotate(f.Vector3.Y(180));
-        root.appendChild(L12_Doom_UI.avatar);
-        L12_Doom_UI.viewport = new f.Viewport();
-        L12_Doom_UI.viewport.initialize("Viewport", root, cmpCamera, canvas);
-        L12_Doom_UI.viewport.draw();
+        L13_Doom_UIb.avatar.addComponent(cmpCamera);
+        L13_Doom_UIb.avatar.addComponent(new f.ComponentTransform());
+        L13_Doom_UIb.avatar.mtxLocal.translate(f.Vector3.Z(10));
+        L13_Doom_UIb.avatar.mtxLocal.rotate(f.Vector3.Y(180));
+        root.appendChild(L13_Doom_UIb.avatar);
+        L13_Doom_UIb.viewport = new f.Viewport();
+        L13_Doom_UIb.viewport.initialize("Viewport", root, cmpCamera, canvas);
+        L13_Doom_UIb.viewport.draw();
         canvas.addEventListener("mousemove", hndMouse);
         canvas.addEventListener("click", canvas.requestPointerLock);
         f.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, hndLoop);
@@ -56,17 +59,21 @@ var L12_Doom_UI;
         ctrRotation.setInput(0);
         for (let enemy of enemies.getChildren())
             enemy.update();
-        L12_Doom_UI.viewport.draw();
+        L13_Doom_UIb.Hud.displayAmmo(L13_Doom_UIb.ammo);
+        L13_Doom_UIb.Hud.displayHealth(L13_Doom_UIb.health);
+        L13_Doom_UIb.Hud.displayArmor(L13_Doom_UIb.armor);
+        L13_Doom_UIb.viewport.draw();
     }
     function hndMouse(_event) {
         // console.log(_event.movementX, _event.movementY);
         ctrRotation.setInput(_event.movementX);
     }
     function moveAvatar(_speed, _rotation, _strafe) {
-        L12_Doom_UI.avatar.mtxLocal.rotateY(_rotation);
-        let posOld = L12_Doom_UI.avatar.mtxLocal.translation;
-        L12_Doom_UI.avatar.mtxLocal.translateZ(_speed);
-        L12_Doom_UI.avatar.mtxLocal.translateX(_strafe);
+        L13_Doom_UIb.avatar.mtxLocal.rotateY(_rotation);
+        let posOld = L13_Doom_UIb.avatar.mtxLocal.translation;
+        L13_Doom_UIb.avatar.mtxLocal.translateZ(_speed);
+        L13_Doom_UIb.avatar.mtxLocal.translateX(_strafe);
+        L13_Doom_UIb.Hud.displayPosition(posOld);
         let bouncedOff = bounceOffWalls(walls.getChildren());
         if (bouncedOff.length < 2)
             return;
@@ -74,15 +81,15 @@ var L12_Doom_UI;
         if (bouncedOff.length == 0)
             return;
         console.log("Stuck!");
-        L12_Doom_UI.avatar.mtxLocal.translation = posOld;
+        L13_Doom_UIb.avatar.mtxLocal.translation = posOld;
     }
     function bounceOffWalls(_walls) {
         let bouncedOff = [];
-        let posAvatar = L12_Doom_UI.avatar.mtxLocal.translation;
+        let posAvatar = L13_Doom_UIb.avatar.mtxLocal.translation;
         for (let wall of _walls) {
             let posBounce = wall.calculateBounce(posAvatar, 1);
             if (posBounce) {
-                L12_Doom_UI.avatar.mtxLocal.translation = posBounce;
+                L13_Doom_UIb.avatar.mtxLocal.translation = posBounce;
                 bouncedOff.push(wall);
             }
         }
@@ -93,9 +100,9 @@ var L12_Doom_UI;
         let txtCacodemon = new f.TextureImage();
         await txtCacodemon.load("../DoomAssets/Cacodemon.png");
         let coatSprite = new f.CoatTextured(clrWhite, txtCacodemon);
-        L12_Doom_UI.Enemy.generateSprites(coatSprite);
-        for (let i = 0; i < 10; i++)
-            enemies.appendChild(new L12_Doom_UI.Enemy("Cacodemon" + i, f.Vector3.Z(3)));
+        L13_Doom_UIb.Enemy.generateSprites(coatSprite);
+        for (let i = 0; i < 1; i++)
+            enemies.appendChild(new L13_Doom_UIb.Enemy("Cacodemon" + i, f.Vector3.Z(3)));
         // enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
         // enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
         console.log("Enemies", enemies);
@@ -105,19 +112,19 @@ var L12_Doom_UI;
         let walls = new f.Node("Walls");
         let txtWall = new f.TextureImage("../DoomAssets/CEMPOIS.png");
         let mtrWall = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(clrWhite, txtWall));
-        walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.Y(L12_Doom_UI.sizeWall / 2), f.Vector3.ZERO(), mtrWall));
-        walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(0.5, 1, -0.866), L12_Doom_UI.sizeWall / 2), f.Vector3.Y(120), mtrWall));
-        walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), L12_Doom_UI.sizeWall / 2), f.Vector3.Y(-120), mtrWall));
-        for (let i = -L12_Doom_UI.numWalls / 2 + 0.5; i < L12_Doom_UI.numWalls / 2; i++) {
-            walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-L12_Doom_UI.numWalls / 2, 0.5, i), L12_Doom_UI.sizeWall), f.Vector3.Y(90), mtrWall));
+        walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.Y(L13_Doom_UIb.sizeWall / 2), f.Vector3.ZERO(), mtrWall));
+        walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(0.5, 1, -0.866), L13_Doom_UIb.sizeWall / 2), f.Vector3.Y(120), mtrWall));
+        walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), L13_Doom_UIb.sizeWall / 2), f.Vector3.Y(-120), mtrWall));
+        for (let i = -L13_Doom_UIb.numWalls / 2 + 0.5; i < L13_Doom_UIb.numWalls / 2; i++) {
+            walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-L13_Doom_UIb.numWalls / 2, 0.5, i), L13_Doom_UIb.sizeWall), f.Vector3.Y(90), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(L12_Doom_UI.numWalls / 2, 0.5, i), L12_Doom_UI.sizeWall), f.Vector3.Y(-90), mtrWall));
+            walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(L13_Doom_UIb.numWalls / 2, 0.5, i), L13_Doom_UIb.sizeWall), f.Vector3.Y(-90), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -L12_Doom_UI.numWalls / 2), L12_Doom_UI.sizeWall), f.Vector3.Y(0), mtrWall));
+            walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -L13_Doom_UIb.numWalls / 2), L13_Doom_UIb.sizeWall), f.Vector3.Y(0), mtrWall));
             // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
-            walls.appendChild(new L12_Doom_UI.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, L12_Doom_UI.numWalls / 2), L12_Doom_UI.sizeWall), f.Vector3.Y(180), mtrWall));
+            walls.appendChild(new L13_Doom_UIb.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, L13_Doom_UIb.numWalls / 2), L13_Doom_UIb.sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
     }
-})(L12_Doom_UI || (L12_Doom_UI = {}));
+})(L13_Doom_UIb || (L13_Doom_UIb = {}));
 //# sourceMappingURL=Main.js.map
