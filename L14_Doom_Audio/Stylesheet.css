@@ -1,0 +1,54 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    font-family: Calibri;
+  }
+  canvas {
+    width: 100vw;
+    height: 100vh;
+  }
+  #position {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    font-size: large;
+  }
+  #HUD {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  #HUD-bar {
+    width: 100vw;
+  }
+  #HUD p {
+    position: absolute;
+    margin-top: 0;
+    top: 0;
+    font-size: 6vw;
+    font-weight: bold;
+    color: rgb(219, 0, 0);
+    text-shadow: 2px  2px 2px black,
+                 1px -1px 1px black,
+                 -1px  1px 1px black,
+                 -1px -1px 1px black;
+  }
+  #ammo {
+    margin-left: 2.5vw;
+  }
+  #health {
+    margin-left: 16.5vw;
+  }
+  #face {
+    position: absolute;
+    margin-top: 0;
+    top: 0;
+    width: 7.5vw;
+    margin-left: 46.5vw;
+    margin-top: 1vw;
+  }
+  #armor {
+    margin-left: 57.5vw;
+  }
