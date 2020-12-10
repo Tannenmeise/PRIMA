@@ -50,7 +50,7 @@ namespace L13_Doom_UIb {
         for (let angle: number = 0; angle < 5; angle++) {
           let name: string = "Idle" + ANGLE[angle];
           let sprite: faid.SpriteSheetAnimation = new faid.SpriteSheetAnimation(name, _spritesheet);
-          sprite.generateByGrid(f.Rectangle.GET(44 + angle * 107, 33, 63, 66), 3, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(100));
+          sprite.generateByGrid(f.Rectangle.GET(angle * 77, 0, 75, 77), 3, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
           Enemy.animations[name] = sprite;
         }
       }
