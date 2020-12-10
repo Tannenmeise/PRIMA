@@ -18,6 +18,12 @@ var L14_Doom_Audio;
     gunshot = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gunshot.wav"), false, false);
     gunshot.volume = 0.3;
     root.addComponent(gunshot);
+    let gunReload;
+    gunReload = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gun_Reload.wav"), false, false);
+    root.addComponent(gunReload);
+    let enemyHit;
+    enemyHit = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
+    root.addComponent(enemyHit);
     let ctrSpeed = new f.Control("AvatarSpeed", 0.3, 0 /* PROPORTIONAL */);
     ctrSpeed.setDelay(100);
     let ctrStrafe = new f.Control("AvatarSpeed", 0.1, 0 /* PROPORTIONAL */);
@@ -130,6 +136,7 @@ var L14_Doom_Audio;
     }
     function shoot() {
         gunshot.play(true);
+        gunReload.play(true);
         L14_Doom_Audio.ammo--;
         hndlHit();
     }
@@ -137,15 +144,11 @@ var L14_Doom_Audio;
         let ray = new f.Ray(L14_Doom_Audio.avatar.mtxWorld.getZ(), L14_Doom_Audio.avatar.mtxWorld.translation, 20);
         for (let enemy of enemies.getChildren()) {
             let intersect = ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ());
-            //let sizeBe: f.Vector3 = enemy.getComponent(f.ComponentMesh).pivot.scaling;
-            let localIntersect = f.Vector3.TRANSFORMATION(intersect, L14_Doom_Audio.avatar.mtxWorldInverse, true);
-            //if (Math.abs(localIntersect.x) > 0.5 * sizeBe.x) {
-            if (Math.abs(localIntersect.x) > 0.5) {
-                console.log("help");
-                return;
-            }
-            else {
+            let abstand1 = f.Vector3.DIFFERENCE(enemy.mtxWorld.translation, intersect);
+            let abstand2 = Math.sqrt(Math.pow(abstand1.x, 2) + Math.pow(abstand1.y, 2) + Math.pow(abstand1.z, 2));
+            if (abstand2 < 0.5) {
                 enemy.hurt();
+                enemyHit.play(true);
             }
         }
     }

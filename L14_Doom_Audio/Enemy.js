@@ -23,7 +23,6 @@ var L14_Doom_Audio;
         constructor(_name = "Enemy", _position) {
             super(_name);
             this.health = 3;
-            //public hitbox: f.MeshCube = new f.MeshCube();
             this.speed = 3;
             this.angleView = 0;
             this.addComponent(new f.ComponentTransform());
@@ -38,10 +37,6 @@ var L14_Doom_Audio;
             this.sprite.framerate = 2;
             this.idleAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Idle.wav"), true, true);
             this.addComponent(this.idleAudio);
-            this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
-            this.addComponent(this.hurtAudio);
-            //let hitboxCmp: f.ComponentMesh = new f.ComponentMesh(this.hitbox);
-            //this.addComponent(hitboxCmp);
             let cmpStateMachine = new L14_Doom_Audio.ComponentStateMachineEnemy();
             this.addComponent(cmpStateMachine);
             cmpStateMachine.stateCurrent = JOB.PATROL;
@@ -70,7 +65,6 @@ var L14_Doom_Audio;
             console.log("New target", this.posTarget.toString());
         }
         hurt() {
-            this.hurtAudio.play(true);
             this.health--;
             if (this.health <= 0)
                 this.getParent().removeChild(this);

@@ -16,7 +16,6 @@ namespace L14_Doom_Audio {
       public idleAudio: ƒ.ComponentAudio;
       public hurtAudio: ƒ.ComponentAudio;
       public health: number = 3;
-      //public hitbox: f.MeshCube = new f.MeshCube();
 
       public speed: number = 3;
       public posTarget: f.Vector3;
@@ -44,12 +43,6 @@ namespace L14_Doom_Audio {
 
         this.idleAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Idle.wav"), true, true);
         this.addComponent(this.idleAudio);
-        this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
-        this.addComponent(this.hurtAudio);
-
-        //let hitboxCmp: f.ComponentMesh = new f.ComponentMesh(this.hitbox);
-        //this.addComponent(hitboxCmp);
-        
   
         let cmpStateMachine: ComponentStateMachineEnemy = new ComponentStateMachineEnemy();
         this.addComponent(cmpStateMachine);
@@ -88,7 +81,6 @@ namespace L14_Doom_Audio {
   
 
       public hurt(): void {
-        this.hurtAudio.play(true);
         this.health--;
         if (this.health <= 0)
           this.getParent().removeChild(this);
