@@ -73,7 +73,6 @@ var L14_Doom_Audio;
         L14_Doom_Audio.viewport.draw();
     }
     function hndMouse(_event) {
-        // console.log(_event.movementX, _event.movementY);
         ctrRotation.setInput(_event.movementX);
     }
     function moveAvatar(_speed, _rotation, _strafe) {
@@ -111,8 +110,6 @@ var L14_Doom_Audio;
         L14_Doom_Audio.Enemy.generateSprites(coatSprite);
         for (let i = 0; i < 1; i++)
             enemies.appendChild(new L14_Doom_Audio.Enemy("Cacodemon" + i, f.Vector3.Z(3)));
-        // enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
-        // enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
         console.log("Enemies", enemies);
         return enemies;
     }
@@ -125,11 +122,8 @@ var L14_Doom_Audio;
         walls.appendChild(new L14_Doom_Audio.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-0.5, 1, -0.866), L14_Doom_Audio.sizeWall / 2), f.Vector3.Y(-120), mtrWall));
         for (let i = -L14_Doom_Audio.numWalls / 2 + 0.5; i < L14_Doom_Audio.numWalls / 2; i++) {
             walls.appendChild(new L14_Doom_Audio.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-L14_Doom_Audio.numWalls / 2, 0.5, i), L14_Doom_Audio.sizeWall), f.Vector3.Y(90), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L14_Doom_Audio.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(L14_Doom_Audio.numWalls / 2, 0.5, i), L14_Doom_Audio.sizeWall), f.Vector3.Y(-90), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L14_Doom_Audio.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -L14_Doom_Audio.numWalls / 2), L14_Doom_Audio.sizeWall), f.Vector3.Y(0), mtrWall));
-            // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
             walls.appendChild(new L14_Doom_Audio.Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, L14_Doom_Audio.numWalls / 2), L14_Doom_Audio.sizeWall), f.Vector3.Y(180), mtrWall));
         }
         return walls;
@@ -137,6 +131,15 @@ var L14_Doom_Audio;
     function shoot() {
         gunshot.play(true);
         L14_Doom_Audio.ammo--;
+        hndlHit();
+    }
+    function hndlHit() {
+        let ray = new f.Ray(L14_Doom_Audio.avatar.mtxWorld.getZ(), L14_Doom_Audio.avatar.mtxWorld.translation, 20);
+        for (let enemy of enemies.getChildren()) {
+            console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
+            console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
+            enemy.hurt();
+        }
     }
 })(L14_Doom_Audio || (L14_Doom_Audio = {}));
 //# sourceMappingURL=Main.js.map

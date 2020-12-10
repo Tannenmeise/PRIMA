@@ -102,7 +102,6 @@ namespace L14_Doom_Audio {
     }
   
     function hndMouse(_event: MouseEvent): void {
-      // console.log(_event.movementX, _event.movementY);
       ctrRotation.setInput(_event.movementX);
     }
   
@@ -149,8 +148,6 @@ namespace L14_Doom_Audio {
       Enemy.generateSprites(coatSprite);
       for (let i: number = 0; i < 1; i++)
         enemies.appendChild(new Enemy("Cacodemon" + i, f.Vector3.Z(3)));
-      // enemies.appendChild(new Enemy("Cacodemon1", f.Vector3.X(3)));
-      // enemies.appendChild(new Enemy("Cacodemon2", f.Vector3.X(-3)));
   
       console.log("Enemies", enemies);
       return enemies;
@@ -168,14 +165,8 @@ namespace L14_Doom_Audio {
   
       for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++) {
         walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(-numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(90), mtrWall));
-  
-        // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
         walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(numWalls / 2, 0.5, i), sizeWall), f.Vector3.Y(-90), mtrWall));
-  
-        // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
         walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, -numWalls / 2), sizeWall), f.Vector3.Y(0), mtrWall));
-  
-        // for (let i: number = -numWalls / 2 + 0.5; i < numWalls / 2; i++)
         walls.appendChild(new Wall(f.Vector2.ONE(3), f.Vector3.SCALE(new f.Vector3(i, 0.5, numWalls / 2), sizeWall), f.Vector3.Y(180), mtrWall));
       }
   
@@ -185,6 +176,17 @@ namespace L14_Doom_Audio {
     function shoot(): void {
       gunshot.play(true);
       ammo--;
+      hndlHit();
+
+    }
+
+    function hndlHit(): void {
+      let ray: f.Ray = new f.Ray(avatar.mtxWorld.getZ(), avatar.mtxWorld.translation, 20);
+      for (let enemy of enemies.getChildren() as Enemy[]) {
+        console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
+        console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
+        enemy.hurt();
+      }
     }
 
   }

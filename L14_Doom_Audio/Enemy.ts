@@ -39,6 +39,8 @@ namespace L14_Doom_Audio {
 
         this.idleAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Idle.wav"), true, true);
         this.addComponent(this.idleAudio);
+        this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
+        this.addComponent(this.hurtAudio);
   
         let cmpStateMachine: ComponentStateMachineEnemy = new ComponentStateMachineEnemy();
         this.addComponent(cmpStateMachine);
@@ -76,6 +78,10 @@ namespace L14_Doom_Audio {
         console.log("New target", this.posTarget.toString());
       }
   
+      public hurt(): void {
+        this.hurtAudio.play(true);
+      }
+
       private displayAnimation(): void {
         this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(avatar.mtxLocal.translation, this.mtxWorldInverse, true));
   
@@ -102,5 +108,6 @@ namespace L14_Doom_Audio {
       private flip(_reverse: boolean): void {
         this.sprite.mtxLocal.rotation = f.Vector3.Y(_reverse ? 180 : 0);
       }
+
     }
   }

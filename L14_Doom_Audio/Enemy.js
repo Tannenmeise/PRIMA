@@ -36,6 +36,8 @@ var L14_Doom_Audio;
             this.sprite.framerate = 2;
             this.idleAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Idle.wav"), true, true);
             this.addComponent(this.idleAudio);
+            this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
+            this.addComponent(this.hurtAudio);
             let cmpStateMachine = new L14_Doom_Audio.ComponentStateMachineEnemy();
             this.addComponent(cmpStateMachine);
             cmpStateMachine.stateCurrent = JOB.PATROL;
@@ -63,6 +65,9 @@ var L14_Doom_Audio;
             let range = L14_Doom_Audio.sizeWall * L14_Doom_Audio.numWalls / 2 - 2;
             this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
             console.log("New target", this.posTarget.toString());
+        }
+        hurt() {
+            this.hurtAudio.play(true);
         }
         displayAnimation() {
             this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L14_Doom_Audio.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
