@@ -136,9 +136,17 @@ var L14_Doom_Audio;
     function hndlHit() {
         let ray = new f.Ray(L14_Doom_Audio.avatar.mtxWorld.getZ(), L14_Doom_Audio.avatar.mtxWorld.translation, 20);
         for (let enemy of enemies.getChildren()) {
-            console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
-            console.log(ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ()));
-            enemy.hurt();
+            let intersect = ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ());
+            //let sizeBe: f.Vector3 = enemy.getComponent(f.ComponentMesh).pivot.scaling;
+            let localIntersect = f.Vector3.TRANSFORMATION(intersect, L14_Doom_Audio.avatar.mtxWorldInverse, true);
+            //if (Math.abs(localIntersect.x) > 0.5 * sizeBe.x) {
+            if (Math.abs(localIntersect.x) > 0.5) {
+                console.log("help");
+                return;
+            }
+            else {
+                enemy.hurt();
+            }
         }
     }
 })(L14_Doom_Audio || (L14_Doom_Audio = {}));

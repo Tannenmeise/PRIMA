@@ -12,14 +12,19 @@ namespace L14_Doom_Audio {
   
     export class Enemy extends f.Node {
       private static animations: faid.SpriteSheetAnimations;
+
       public idleAudio: ƒ.ComponentAudio;
       public hurtAudio: ƒ.ComponentAudio;
+      public health: number = 3;
+      //public hitbox: f.MeshCube = new f.MeshCube();
+
       public speed: number = 3;
       public posTarget: f.Vector3;
       private show: f.Node;
       private sprite: faid.NodeSprite;
       private angleView: number = 0;
   
+
       constructor(_name: string = "Enemy", _position: f.Vector3) {
         super(_name);
   
@@ -41,13 +46,15 @@ namespace L14_Doom_Audio {
         this.addComponent(this.idleAudio);
         this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
         this.addComponent(this.hurtAudio);
+
+        //let hitboxCmp: f.ComponentMesh = new f.ComponentMesh(this.hitbox);
+        //this.addComponent(hitboxCmp);
+        
   
         let cmpStateMachine: ComponentStateMachineEnemy = new ComponentStateMachineEnemy();
         this.addComponent(cmpStateMachine);
         cmpStateMachine.stateCurrent = JOB.PATROL;
         this.chooseTargetPosition();
-  
-        // this.appendChild(new faid.Node("Cube", f.Matrix4x4.IDENTITY(), new f.Material("Cube", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("red"))), new f.MeshCube()));
       }
   
   
@@ -72,15 +79,21 @@ namespace L14_Doom_Audio {
         this.mtxLocal.translateZ(this.speed * f.Loop.timeFrameGame / 1000);
       }
   
+
       public chooseTargetPosition(): void {
         let range: number = sizeWall * numWalls / 2 - 2;
         this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
         console.log("New target", this.posTarget.toString());
       }
   
+
       public hurt(): void {
         this.hurtAudio.play(true);
+        this.health--;
+        if (this.health <= 0)
+          this.getParent().removeChild(this);
       }
+
 
       private displayAnimation(): void {
         this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(avatar.mtxLocal.translation, this.mtxWorldInverse, true));

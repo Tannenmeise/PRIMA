@@ -22,6 +22,8 @@ var L14_Doom_Audio;
     class Enemy extends f.Node {
         constructor(_name = "Enemy", _position) {
             super(_name);
+            this.health = 3;
+            //public hitbox: f.MeshCube = new f.MeshCube();
             this.speed = 3;
             this.angleView = 0;
             this.addComponent(new f.ComponentTransform());
@@ -38,11 +40,12 @@ var L14_Doom_Audio;
             this.addComponent(this.idleAudio);
             this.hurtAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
             this.addComponent(this.hurtAudio);
+            //let hitboxCmp: f.ComponentMesh = new f.ComponentMesh(this.hitbox);
+            //this.addComponent(hitboxCmp);
             let cmpStateMachine = new L14_Doom_Audio.ComponentStateMachineEnemy();
             this.addComponent(cmpStateMachine);
             cmpStateMachine.stateCurrent = JOB.PATROL;
             this.chooseTargetPosition();
-            // this.appendChild(new faid.Node("Cube", f.Matrix4x4.IDENTITY(), new f.Material("Cube", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("red"))), new f.MeshCube()));
         }
         static generateSprites(_spritesheet) {
             Enemy.animations = {};
@@ -68,6 +71,9 @@ var L14_Doom_Audio;
         }
         hurt() {
             this.hurtAudio.play(true);
+            this.health--;
+            if (this.health <= 0)
+                this.getParent().removeChild(this);
         }
         displayAnimation() {
             this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L14_Doom_Audio.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
