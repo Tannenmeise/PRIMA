@@ -7,11 +7,11 @@ namespace L14_Doom_Audio {
     }
   
     export enum JOB {
-      IDLE, PATROL
+      IDLE, PATROL, DEAD
     }
   
     export class Enemy extends f.Node {
-      private static animations: faid.SpriteSheetAnimations;
+      public static animations: faid.SpriteSheetAnimations;
 
       public idleAudio: ƒ.ComponentAudio;
       public hurtAudio: ƒ.ComponentAudio;
@@ -19,8 +19,8 @@ namespace L14_Doom_Audio {
 
       public speed: number = 3;
       public posTarget: f.Vector3;
+      public sprite: faid.NodeSprite;
       private show: f.Node;
-      private sprite: faid.NodeSprite;
       private angleView: number = 0;
   
 
@@ -59,6 +59,9 @@ namespace L14_Doom_Audio {
           sprite.generateByGrid(f.Rectangle.GET(angle * 77, 0, 75, 77), 3, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
           Enemy.animations[name] = sprite;
         }
+        let sprite: faid.SpriteSheetAnimation = new faid.SpriteSheetAnimation(name, _spritesheet);
+        sprite.generateByGrid(f.Rectangle.GET(5 * 75, 6 * 77, 75, 77), 1, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
+        Enemy.animations["Dead"] = sprite;
       }
   
       public update(): void {
@@ -79,13 +82,6 @@ namespace L14_Doom_Audio {
         console.log("New target", this.posTarget.toString());
       }
   
-
-      public hurt(): void {
-        this.health--;
-        if (this.health <= 0)
-          this.getParent().removeChild(this);
-      }
-
 
       private displayAnimation(): void {
         this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(avatar.mtxLocal.translation, this.mtxWorldInverse, true));

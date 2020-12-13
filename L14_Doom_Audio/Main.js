@@ -147,8 +147,8 @@ var L14_Doom_Audio;
             let abstand1 = f.Vector3.DIFFERENCE(enemy.mtxWorld.translation, intersect);
             let abstand2 = Math.sqrt(Math.pow(abstand1.x, 2) + Math.pow(abstand1.y, 2) + Math.pow(abstand1.z, 2));
             if (abstand2 < 0.5) {
-                enemy.hurt();
                 enemyHit.play(true);
+                enemy.health--;
             }
         }
     }

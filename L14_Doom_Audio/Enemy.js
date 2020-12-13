@@ -18,6 +18,7 @@ var L14_Doom_Audio;
     (function (JOB) {
         JOB[JOB["IDLE"] = 0] = "IDLE";
         JOB[JOB["PATROL"] = 1] = "PATROL";
+        JOB[JOB["DEAD"] = 2] = "DEAD";
     })(JOB = L14_Doom_Audio.JOB || (L14_Doom_Audio.JOB = {}));
     class Enemy extends f.Node {
         constructor(_name = "Enemy", _position) {
@@ -50,6 +51,9 @@ var L14_Doom_Audio;
                 sprite.generateByGrid(f.Rectangle.GET(angle * 77, 0, 75, 77), 3, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
                 Enemy.animations[name] = sprite;
             }
+            let sprite = new faid.SpriteSheetAnimation(name, _spritesheet);
+            sprite.generateByGrid(f.Rectangle.GET(5 * 75, 6 * 77, 75, 77), 1, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
+            Enemy.animations["Dead"] = sprite;
         }
         update() {
             this.getComponent(L14_Doom_Audio.ComponentStateMachineEnemy).act();
@@ -63,11 +67,6 @@ var L14_Doom_Audio;
             let range = L14_Doom_Audio.sizeWall * L14_Doom_Audio.numWalls / 2 - 2;
             this.posTarget = new f.Vector3(f.Random.default.getRange(-range, range), 0, f.Random.default.getRange(-range, range));
             console.log("New target", this.posTarget.toString());
-        }
-        hurt() {
-            this.health--;
-            if (this.health <= 0)
-                this.getParent().removeChild(this);
         }
         displayAnimation() {
             this.show.mtxLocal.showTo(f.Vector3.TRANSFORMATION(L14_Doom_Audio.avatar.mtxLocal.translation, this.mtxWorldInverse, true));
