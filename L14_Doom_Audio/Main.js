@@ -14,16 +14,21 @@ var L14_Doom_Audio;
     let root = new f.Node("Root");
     let walls;
     let enemies;
-    let gunshot;
-    gunshot = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gunshot.wav"), false, false);
+    // #region (audio)
+    let gunshot = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gunshot.wav"), false, false);
     gunshot.volume = 0.3;
     root.addComponent(gunshot);
-    let gunReload;
-    gunReload = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gun_Reload.wav"), false, false);
+    let gunReload = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gun_Reload.wav"), false, false);
     root.addComponent(gunReload);
-    let enemyHit;
-    enemyHit = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
+    let enemyHit = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
     root.addComponent(enemyHit);
+    let head = new f.Node("Head");
+    L14_Doom_Audio.avatar.addChild(head);
+    head.addComponent(new f.ComponentTransform());
+    head.mtxLocal.translateY(1.7);
+    let ears = new f.ComponentAudioListener();
+    head.addComponent(ears);
+    // #endregion
     let ctrSpeed = new f.Control("AvatarSpeed", 0.3, 0 /* PROPORTIONAL */);
     ctrSpeed.setDelay(100);
     let ctrStrafe = new f.Control("AvatarSpeed", 0.1, 0 /* PROPORTIONAL */);
@@ -146,7 +151,7 @@ var L14_Doom_Audio;
             let intersect = ray.intersectPlane(enemy.mtxWorld.translation, enemy.mtxWorld.getZ());
             let abstand1 = f.Vector3.DIFFERENCE(enemy.mtxWorld.translation, intersect);
             let abstand2 = Math.sqrt(Math.pow(abstand1.x, 2) + Math.pow(abstand1.y, 2) + Math.pow(abstand1.z, 2));
-            if (abstand2 < 0.5) {
+            if (abstand2 < 0.5 && enemy.health > 0) {
                 enemyHit.play(true);
                 enemy.health--;
             }

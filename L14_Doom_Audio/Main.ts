@@ -19,17 +19,22 @@ namespace L14_Doom_Audio {
     let walls: f.Node;
     let enemies: f.Node;
 
-    let gunshot: ƒ.ComponentAudio;
-    gunshot = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gunshot.wav"), false, false);
+    // #region (audio)
+    let gunshot: ƒ.ComponentAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gunshot.wav"), false, false);
     gunshot.volume = 0.3;
     root.addComponent(gunshot);
-    let gunReload: ƒ.ComponentAudio;
-    gunReload = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gun_Reload.wav"), false, false);
+    let gunReload: ƒ.ComponentAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Gun_Reload.wav"), false, false);
     root.addComponent(gunReload);
-    let enemyHit: ƒ.ComponentAudio;
-    enemyHit = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
+    let enemyHit: ƒ.ComponentAudio = new ƒ.ComponentAudio(new ƒ.Audio("../DoomAssets/Enemy_Hit.wav"), false, false);
     root.addComponent(enemyHit);
 
+    let head: f.Node = new f.Node("Head");
+    avatar.addChild(head);
+    head.addComponent(new f.ComponentTransform());
+    head.mtxLocal.translateY(1.7);
+    let ears: f.ComponentAudioListener = new f.ComponentAudioListener();
+    head.addComponent(ears);
+    // #endregion
   
     let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 0.3, f.CONTROL_TYPE.PROPORTIONAL);
     ctrSpeed.setDelay(100);
@@ -103,7 +108,7 @@ namespace L14_Doom_Audio {
       Hud.displayAmmo(ammo);
       Hud.displayHealth(health);
       Hud.displayArmor(armor);
-      
+
       f.AudioManager.default.update();
       viewport.draw();
     }
@@ -195,7 +200,7 @@ namespace L14_Doom_Audio {
         let abstand1: f.Vector3 = f.Vector3.DIFFERENCE(enemy.mtxWorld.translation, intersect);
         let abstand2: number = Math.sqrt(Math.pow(abstand1.x, 2) + Math.pow(abstand1.y, 2) + Math.pow(abstand1.z, 2));
     
-        if (abstand2 < 0.5) {
+        if (abstand2 < 0.5 && enemy.health > 0) {
           enemyHit.play(true);
           enemy.health--;
         }

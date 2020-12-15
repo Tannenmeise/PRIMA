@@ -39,6 +39,7 @@ namespace L14_Doom_Audio {
         setup.setAction(JOB.DEAD, (_machine) => {
           let container: Enemy = <Enemy>(<faid.ComponentStateMachine<JOB>>_machine).getContainer();
           container.sprite.setAnimation(<faid.SpriteSheetAnimation>Enemy.animations["Dead"]);
+          container.idleAudio.play(false);
         });
   
         return setup;

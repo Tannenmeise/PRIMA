@@ -34,6 +34,7 @@ var L14_Doom_Audio;
                 setup.setAction(L14_Doom_Audio.JOB.DEAD, (_machine) => {
                     let container = _machine.getContainer();
                     container.sprite.setAnimation(L14_Doom_Audio.Enemy.animations["Dead"]);
+                    container.idleAudio.play(false);
                 });
                 return setup;
             }

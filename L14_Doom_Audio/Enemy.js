@@ -51,9 +51,10 @@ var L14_Doom_Audio;
                 sprite.generateByGrid(f.Rectangle.GET(angle * 77, 0, 75, 77), 3, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
                 Enemy.animations[name] = sprite;
             }
+            let name = "Dead";
             let sprite = new faid.SpriteSheetAnimation(name, _spritesheet);
             sprite.generateByGrid(f.Rectangle.GET(5 * 75, 6 * 77, 75, 77), 1, 32, f.ORIGIN2D.BOTTOMCENTER, f.Vector2.Y(75));
-            Enemy.animations["Dead"] = sprite;
+            Enemy.animations[name] = sprite;
         }
         update() {
             this.getComponent(L14_Doom_Audio.ComponentStateMachineEnemy).act();
