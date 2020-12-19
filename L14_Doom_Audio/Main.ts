@@ -10,10 +10,14 @@ namespace L14_Doom_Audio {
   
     export let viewport: f.Viewport;
 
+    // avatar
     export let avatar: f.Node = new f.Node("Avatar");
     export let ammo: number = 100;
     export let health: number = 100;
     export let armor: number = 100;
+
+    let speed: number;
+    let acceleration: number;
 
     let root: f.Node = new f.Node("Root");
     let walls: f.Node;
@@ -35,13 +39,17 @@ namespace L14_Doom_Audio {
     let ears: f.ComponentAudioListener = new f.ComponentAudioListener();
     head.addComponent(ears);
     // #endregion
-  
+    // #region (control)
     let ctrSpeed: f.Control = new f.Control("AvatarSpeed", 0.3, f.CONTROL_TYPE.PROPORTIONAL);
     ctrSpeed.setDelay(100);
     let ctrStrafe: f.Control = new f.Control("AvatarSpeed", 0.1, f.CONTROL_TYPE.PROPORTIONAL);
     ctrSpeed.setDelay(100);
     let ctrRotation: f.Control = new f.Control("AvatarRotation", -0.1, f.CONTROL_TYPE.PROPORTIONAL);
     ctrRotation.setDelay(100);
+
+    let ctrJump: f.Control = new f.Control("AvatarJump", 0.3, f.CONTROL_TYPE.PROPORTIONAL);
+    ctrJump.setDelay(100);
+    // #endregion (control)
 
   
     async function hndLoad(_event: Event): Promise<void> {
@@ -98,9 +106,14 @@ namespace L14_Doom_Audio {
         f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.A, f.KEYBOARD_CODE.ARROW_LEFT])
         + f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT])
       );
+      ctrJump.setInput(
+        f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.SPACE])
+      );
   
-      moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput());
+      moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput(), ctrJump.getOutput());
       ctrRotation.setInput(0);
+      if (f.Keyboard.isPressedOne([f.KEYBOARD_CODE.SPACE]) != true)
+        hndFall();
   
       for (let enemy of enemies.getChildren() as Enemy[])
         enemy.update();
@@ -112,16 +125,22 @@ namespace L14_Doom_Audio {
       f.AudioManager.default.update();
       viewport.draw();
     }
+
+    function hndFall(): void {
+      if (avatar.mtxWorld.translation.y > 0)
+      avatar.mtxLocal.translateY(-0.1);
+    }
   
     function hndMouse(_event: MouseEvent): void {
       ctrRotation.setInput(_event.movementX);
     }
   
-    function moveAvatar(_speed: number, _rotation: number, _strafe: number): void {
+    function moveAvatar(_speed: number, _rotation: number, _strafe: number, _jump: number): void {
       avatar.mtxLocal.rotateY(_rotation);
       let posOld: f.Vector3 = avatar.mtxLocal.translation;
       avatar.mtxLocal.translateZ(_speed);
       avatar.mtxLocal.translateX(_strafe);
+      avatar.mtxLocal.translateY(_jump);
 
       Hud.displayPosition(posOld);
   

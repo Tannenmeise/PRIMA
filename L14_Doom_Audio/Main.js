@@ -7,10 +7,13 @@ var L14_Doom_Audio;
     const clrWhite = f.Color.CSS("white");
     L14_Doom_Audio.sizeWall = 3;
     L14_Doom_Audio.numWalls = 20;
+    // avatar
     L14_Doom_Audio.avatar = new f.Node("Avatar");
     L14_Doom_Audio.ammo = 100;
     L14_Doom_Audio.health = 100;
     L14_Doom_Audio.armor = 100;
+    let speed;
+    let acceleration;
     let root = new f.Node("Root");
     let walls;
     let enemies;
@@ -29,12 +32,16 @@ var L14_Doom_Audio;
     let ears = new f.ComponentAudioListener();
     head.addComponent(ears);
     // #endregion
+    // #region (control)
     let ctrSpeed = new f.Control("AvatarSpeed", 0.3, 0 /* PROPORTIONAL */);
     ctrSpeed.setDelay(100);
     let ctrStrafe = new f.Control("AvatarSpeed", 0.1, 0 /* PROPORTIONAL */);
     ctrSpeed.setDelay(100);
     let ctrRotation = new f.Control("AvatarRotation", -0.1, 0 /* PROPORTIONAL */);
     ctrRotation.setDelay(100);
+    let ctrJump = new f.Control("AvatarJump", 0.3, 0 /* PROPORTIONAL */);
+    ctrJump.setDelay(100);
+    // #endregion (control)
     async function hndLoad(_event) {
         const canvas = document.querySelector("canvas");
         let meshQuad = new f.MeshQuad("Quad");
@@ -73,8 +80,11 @@ var L14_Doom_Audio;
             + f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.W, f.KEYBOARD_CODE.ARROW_UP]));
         ctrStrafe.setInput(f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.A, f.KEYBOARD_CODE.ARROW_LEFT])
             + f.Keyboard.mapToValue(-1, 0, [f.KEYBOARD_CODE.D, f.KEYBOARD_CODE.ARROW_RIGHT]));
-        moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput());
+        ctrJump.setInput(f.Keyboard.mapToValue(1, 0, [f.KEYBOARD_CODE.SPACE]));
+        moveAvatar(ctrSpeed.getOutput(), ctrRotation.getOutput(), ctrStrafe.getOutput(), ctrJump.getOutput());
         ctrRotation.setInput(0);
+        if (f.Keyboard.isPressedOne([f.KEYBOARD_CODE.SPACE]) != true)
+            hndFall();
         for (let enemy of enemies.getChildren())
             enemy.update();
         L14_Doom_Audio.Hud.displayAmmo(L14_Doom_Audio.ammo);
@@ -83,14 +93,19 @@ var L14_Doom_Audio;
         f.AudioManager.default.update();
         L14_Doom_Audio.viewport.draw();
     }
+    function hndFall() {
+        if (L14_Doom_Audio.avatar.mtxWorld.translation.y > 0)
+            L14_Doom_Audio.avatar.mtxLocal.translateY(-0.1);
+    }
     function hndMouse(_event) {
         ctrRotation.setInput(_event.movementX);
     }
-    function moveAvatar(_speed, _rotation, _strafe) {
+    function moveAvatar(_speed, _rotation, _strafe, _jump) {
         L14_Doom_Audio.avatar.mtxLocal.rotateY(_rotation);
         let posOld = L14_Doom_Audio.avatar.mtxLocal.translation;
         L14_Doom_Audio.avatar.mtxLocal.translateZ(_speed);
         L14_Doom_Audio.avatar.mtxLocal.translateX(_strafe);
+        L14_Doom_Audio.avatar.mtxLocal.translateY(_jump);
         L14_Doom_Audio.Hud.displayPosition(posOld);
         let bouncedOff = bounceOffWalls(walls.getChildren());
         if (bouncedOff.length < 2)
