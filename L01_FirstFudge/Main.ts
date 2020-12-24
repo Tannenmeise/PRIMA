@@ -15,7 +15,7 @@ namespace L01_FirstFudge {
         let mesh: f.MeshQuad = new f.MeshQuad();
         let cmpMesh: f.ComponentMesh = new f.ComponentMesh(mesh);
         node.addComponent(cmpMesh);
-        
+
         let mtrSolidWhite: f.Material = new f.Material("SolidWhite", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("WHITE")));
         let cmpMaterial: f.ComponentMaterial = new f.ComponentMaterial(mtrSolidWhite);
         node.addComponent(cmpMaterial);

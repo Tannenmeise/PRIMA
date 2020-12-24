@@ -12,9 +12,9 @@ namespace L03_BreakOut_Move {
     //let ballDirection: f.Vector3 = new f.Vector3(0, 0, 0);
 
     window.addEventListener("load", hndlLoad);
-    
+
     function hndlLoad(_event: Event): void {
-        
+
         const canvas: HTMLCanvasElement = document.querySelector("canvas");
 
         root = new f.Node("Root");
@@ -27,7 +27,7 @@ namespace L03_BreakOut_Move {
         ball.addComponent(cmpBall);
         cmpBall.pivot.translateZ(1);
 
-        let lime: f.Material = new f.Material("Green", f.ShaderUniColor , new f.CoatColored(f.Color.CSS("LIME")));
+        let lime: f.Material = new f.Material("Green", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("LIME")));
         let cmpLime: f.ComponentMaterial = new f.ComponentMaterial(lime);
         ball.addComponent(cmpLime);
 

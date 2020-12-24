@@ -51,7 +51,7 @@ namespace L11_Doom_Enemy_b {
     let mtrEnemy: f.Material = new f.Material("Enemy", f.ShaderTexture, new f.CoatTextured(null, txtEnemy));
 
     let enemy1: Enemy = new Enemy(f.Vector2.ONE(3), new f.Vector3(5, 1.5, 5), f.Vector3.ZERO(), mtrEnemy);
-    
+
     enemies.appendChild(enemy1);
     root.appendChild(enemies);
     // #endregion (enemies)
@@ -165,8 +165,8 @@ namespace L11_Doom_Enemy_b {
 
   function checkDistance(_target: Enemy, _avatar: f.Node): boolean {
     let posAvatar: f.Vector3 = new f.Vector3(_avatar.mtxWorld.translation.x, _avatar.mtxWorld.translation.y, _avatar.mtxWorld.translation.z);
-    let posEnemy: f.Vector3 = new f.Vector3 (_target.mtxWorld.translation.x, _target.mtxWorld.translation.y, _target.mtxWorld.translation.z);
-    
+    let posEnemy: f.Vector3 = new f.Vector3(_target.mtxWorld.translation.x, _target.mtxWorld.translation.y, _target.mtxWorld.translation.z);
+
     let vctAvatar: f.Vector3 = f.Vector3.DIFFERENCE(posAvatar, posEnemy);
     let distance: number = f.Vector3.DOT(vctAvatar, _target.mtxWorld.getZ());
 

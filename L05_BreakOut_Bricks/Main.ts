@@ -49,7 +49,7 @@ namespace L05_BreakOut_Bricks {
     viewport.draw();
 
     hndCollision();
-    
+
     if (f.Keyboard.isPressedOne([f.KEYBOARD_CODE.ARROW_LEFT, f.KEYBOARD_CODE.ARROW_RIGHT]))
       console.log("Arrow pressed");
 
@@ -62,28 +62,28 @@ namespace L05_BreakOut_Bricks {
   }
 
   function hndCollision(): void {
-    for (let wall of walls.getChildren()) 
+    for (let wall of walls.getChildren())
       ball.checkCollision(<GameObject>wall);
 
-    for (let brick of bricks.getChildren() as Bricks[]) 
+    for (let brick of bricks.getChildren() as Bricks[])
       if (ball.checkCollision(brick))
         brick.hit();
-  
+
   }
 
   function addBricks(_amount: number): void {
     let x: number = -15;
     let y: number = 10;
     for (let i: number = 0; i < _amount; i++) {
-        if (x > 15) {
-            x = -15;
-            y -= 2;
-        }
-        
-        bricks.addChild(new Bricks(`Brick-${i}`, new f.Vector2(x, y), new f.Vector2(3, 1)));
-        x += 4;
+      if (x > 15) {
+        x = -15;
+        y -= 2;
+      }
+
+      bricks.addChild(new Bricks(`Brick-${i}`, new f.Vector2(x, y), new f.Vector2(3, 1)));
+      x += 4;
     }
-}
+  }
 
 
 }

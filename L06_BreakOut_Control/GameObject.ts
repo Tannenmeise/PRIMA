@@ -7,7 +7,7 @@ namespace L06_BreakOut_Control {
 
     public rect: f.Rectangle;
 
-    
+
     public constructor(_name: string, _position: f.Vector2, _size: f.Vector2) {
       super(_name);
 

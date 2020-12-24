@@ -18,7 +18,7 @@ namespace L04_BreakOut_Reflection {
 
     ball = new GameObject("Ball", new ƒ.Vector2(0, 0), new ƒ.Vector2(1, 1));
     root.addChild(ball);
-    
+
     ball.velocity = new ƒ.Vector3(ƒ.Random.default.getRange(-1, 1), ƒ.Random.default.getRange(-1, 1), 0);
     let speed: number = 15;
     ball.velocity.normalize(speed);

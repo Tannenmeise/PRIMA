@@ -12,7 +12,7 @@ namespace L08_Doom_Design {
     root = new f.Node("Root");
 
     let meshQuad: f.MeshQuad = new f.MeshQuad("Quad");
-    
+
     let txtFloor: f.TextureImage = new f.TextureImage("../DoomAssets/DEM1_5.png");
     let mtrFloor: f.Material = new f.Material("Floor", f.ShaderTexture, new f.CoatTextured(null, txtFloor));
     let floor: faid.Node = new faid.Node("Floor", f.Matrix4x4.ROTATION_X(-90), mtrFloor, meshQuad);
@@ -20,13 +20,13 @@ namespace L08_Doom_Design {
     floor.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(10));
 
     root.appendChild(floor);
-    
+
     let txtWall: f.TextureImage = new f.TextureImage("../DoomAssets/CEMPOIS.png");
     let mtrWall: f.Material = new f.Material("Wall", f.ShaderTexture, new f.CoatTextured(null, txtWall));
     let wall: faid.Node = new faid.Node("Wall", f.Matrix4x4.TRANSLATION(f.Vector3.Y(1)), mtrWall, meshQuad);
     wall.mtxLocal.scale(f.Vector3.ONE(2));
     wall.getComponent(f.ComponentMaterial).pivot.scale(f.Vector2.ONE(1));
-    
+
     root.appendChild(wall);
 
     let cmpCamera: f.ComponentCamera = new f.ComponentCamera();

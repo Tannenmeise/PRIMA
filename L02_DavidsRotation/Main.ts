@@ -6,9 +6,9 @@ namespace L02_DavidsRotation {
     let root: f.Node;
 
     window.addEventListener("load", hndlLoad);
-    
+
     function hndlLoad(_event: Event): void {
-        
+
         const canvas: HTMLCanvasElement = document.querySelector("canvas");
         f.Debug.log(canvas);
 
@@ -30,13 +30,13 @@ namespace L02_DavidsRotation {
 
         // #region Torus
         let torus: f.Node = new f.Node("Torus");
-        let meshTorus: f.MeshTorus = new f.MeshTorus("Torus", 1, 10 , 1) ;
+        let meshTorus: f.MeshTorus = new f.MeshTorus("Torus", 1, 10, 1);
         let cmpTorus: f.ComponentMesh = new f.ComponentMesh(meshTorus);
         cmpTorus.pivot.rotateZ(90);
         cmpTorus.pivot.rotateX(90);
         torus.addComponent(cmpTorus);
 
-        let orange: f.Material = new f.Material("Orange", f.ShaderUniColor , new f.CoatColored(f.Color.CSS("ORANGE")));
+        let orange: f.Material = new f.Material("Orange", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("ORANGE")));
         let cmpOrange: f.ComponentMaterial = new f.ComponentMaterial(orange);
         torus.addComponent(cmpOrange);
 
@@ -45,13 +45,13 @@ namespace L02_DavidsRotation {
 
         // #region Cube
         let cube: f.Node = new f.Node("Cube");
-        let meshCube: f.MeshCube = new f.MeshCube() ;
+        let meshCube: f.MeshCube = new f.MeshCube();
         let cmpCube: f.ComponentMesh = new f.ComponentMesh(meshCube);
         cmpCube.pivot.scaleX(0.5);
         cmpCube.pivot.scaleY(0.5);
         cube.addComponent(cmpCube);
 
-        let red: f.Material = new f.Material("Red", f.ShaderUniColor , new f.CoatColored(f.Color.CSS("RED")));
+        let red: f.Material = new f.Material("Red", f.ShaderUniColor, new f.CoatColored(f.Color.CSS("RED")));
         let cmpRed: f.ComponentMaterial = new f.ComponentMaterial(red);
         cube.addComponent(cmpRed);
 
@@ -70,7 +70,7 @@ namespace L02_DavidsRotation {
         f.Loop.start(f.LOOP_MODE.TIME_GAME, 30);
     }
 
-    
+
     function hndlLoop(_event: Event): void {
         console.log("Tick");
         // Lange Version:
