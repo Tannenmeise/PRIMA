@@ -2,9 +2,9 @@
 
 ## Abgabe
 
-- [Lauffähige Anwendung]()
-- [Quellcode]()
-- [Designdokument]()
+- [Lauffähige Anwendung](https://tannenmeise.github.io/Missys-Teddy-Assembly/game/Build/Main.html)
+- [Quellcode](https://github.com/Tannenmeise/Missys-Teddy-Assembly/tree/main/game/SourceCode)
+- [Designdokument](https://github.com/Tannenmeise/Missys-Teddy-Assembly/blob/main/Dokumente/Designdokument.pdf)
 - [Archiv]()
 
 ## Checkliste für Leistungsnachweis
