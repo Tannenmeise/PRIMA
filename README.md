@@ -2,10 +2,10 @@
 
 ## Abgabe
 
-- [Lauffähige Anwendung](https://tannenmeise.github.io/Missys-Teddy-Assembly/game/Build/Main.html)
-- [Quellcode](https://github.com/Tannenmeise/Missys-Teddy-Assembly/tree/main/game/SourceCode)
+- [Lauffähige Anwendung](https://tannenmeise.github.io/Missys-Teddy-Assembly/Build/Main.html)
+- [Quellcode](https://github.com/Tannenmeise/Missys-Teddy-Assembly/tree/main/SourceCode)
 - [Designdokument](https://github.com/Tannenmeise/Missys-Teddy-Assembly/blob/main/Dokumente/Designdokument.pdf)
-- [Archiv]()
+- [Archiv](https://github.com/Tannenmeise/Missys-Teddy-Assembly/blob/main/Dokumente/Archiv.zip)
 
 ## Checkliste für Leistungsnachweis
 © Prof. Dipl.-Ing. Jirka R. Dell'Oro-Friedl, HFU
